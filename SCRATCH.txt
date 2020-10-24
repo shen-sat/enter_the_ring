@@ -1,0 +1,13 @@
+require 'io/console'
+require 'timeout'
+
+def foobar(n)
+	begin
+		print "Hello #{n}" + "\r"
+	  status = Timeout::timeout(0.02) { answer = STDIN.getch until answer == "y" }
+	rescue Timeout::Error
+	  foobar(n + 1) unless n > 100
+	end
+end
+
+foobar(0)
