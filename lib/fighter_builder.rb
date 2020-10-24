@@ -17,6 +17,10 @@ class FighterBuilder
 		@fighter.lastname = prompt.ask("What is your lastname?")
 	end
 
+	def set_nickname
+		@fighter.nickname = prompt.ask("What is your nickname?")
+	end
+
 	def set_age
 		@fighter.age = prompt.ask("What is your age?")
 	end

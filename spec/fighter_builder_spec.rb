@@ -35,6 +35,14 @@ describe 'FighterBuilder' do
 			expect(fighter_builder.fighter.lastname).to eq('Smith')
 		end
 
+		it 'sets fighter nickname' do
+			allow(prompt).to receive(:ask).and_return('Smokin')
+
+			fighter_builder.set_nickname
+
+			expect(fighter_builder.fighter.nickname).to eq('Smokin')
+		end
+
 		it 'sets fighter age' do
 			allow(prompt).to receive(:ask).and_return(40)
 
