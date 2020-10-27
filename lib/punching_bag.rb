@@ -2,15 +2,26 @@ require 'io/console'
 require 'timeout'
 
 class PunchingBag
-	attr_reader :target, :punch
+	attr_reader :target
 
 	def intro_text
-		puts 'Hit the bag'
+		puts "Start training by pressing x.\nHit the bag by pressing x again.\nYour target is #{target}"
 	end
 
 	def pick_target
 		@target = rand(50..75)
 	end
+
+	def hit?
+		punch = throw_punch
+
+		lower_range = target - 5
+		upper_range = target + 5
+
+		return punch <= upper_range && punch >= lower_range
+	end
+
+private
 
 	def throw_punch(n = 0)
 		begin
@@ -20,16 +31,5 @@ class PunchingBag
 		rescue Timeout::Error
 		  n > 100 ? 0 : throw_punch(n + 1)
 		end
-	end
-
-	def set_punch
-		@punch = throw_punch
-	end
-
-	def hit?
-		lower_range = target - 5
-		upper_range = target + 5
-
-		return punch <= upper_range && punch >= lower_range
 	end
 end
