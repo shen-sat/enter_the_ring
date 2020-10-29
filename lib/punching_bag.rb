@@ -1,11 +1,14 @@
 require 'io/console'
 require 'timeout'
+require 'tty-prompt'
+require 'tty-reader'
 
 class PunchingBag
-	attr_reader :target, :prompt, :punch
+	attr_reader :target, :prompt, :punch, :reader
 
 	def initialize
 		@prompt = TTY::Prompt.new
+		@reader = TTY::Reader.new
 	end
 
 	def train
@@ -17,7 +20,7 @@ class PunchingBag
 
 		set_punch
 
-		result
+		puts result
 
 		show_options
 	end
@@ -34,10 +37,16 @@ private
 
 	def intro_text
 		puts "Start training by pressing x.\nHit the bag by pressing x again.\nYour target is #{target}"
+		loop do
+			answer = reader.read_char
+			
+			break if answer == 'x'
+		end
 	end
 
 	def result
-		hit? ? 'Good punch!' : 'You missed the bag!'
+		output = "You got #{punch} - "
+		output + (hit? ? 'good punch!' : 'you missed the bag!')
 	end
 
 	def show_options

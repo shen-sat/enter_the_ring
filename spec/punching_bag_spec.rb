@@ -4,11 +4,14 @@ describe 'PunchingBag' do
 	subject(:punching_bag) { PunchingBag.new }
 		
 	it 'returns intro text' do
-		expected_output = "Start training by pressing x.\nHit the bag by pressing x again.\nYour target is 60\n"
-		
+		reader = double()
+		allow(TTY::Reader).to receive(:new).and_return(reader)
+		allow(reader).to receive(:read_char).and_return('x')
+
 		allow(punching_bag).to receive(:target).and_return(60)
 
-		
+		expected_output = "Start training by pressing x.\nHit the bag by pressing x again.\nYour target is 60\n"
+
 		expect{ punching_bag.send(:intro_text) }.to output(expected_output).to_stdout
 	end
 	
@@ -51,19 +54,20 @@ describe 'PunchingBag' do
 	end
 
 	describe '#result' do
+		before { allow(punching_bag).to receive(:punch).and_return(99) }
 		context 'when bag is hit' do
 			before { allow(punching_bag).to receive(:hit?).and_return(true) }
 
 			it 'puts it was hit' do
-				expect(punching_bag.send(:result)).to eq('Good punch!')
+				expect(punching_bag.send(:result)).to eq('You got 99 - good punch!')
 			end
 		end
 
-		context 'when bag is not hit' do
+		context 'when bag is missed' do
 			before { allow(punching_bag).to receive(:hit?).and_return(false) }
 
 			it 'puts it was not hit' do
-				expect(punching_bag.send(:result)).to eq('You missed the bag!')
+				expect(punching_bag.send(:result)).to eq('You got 99 - you missed the bag!')
 			end
 		end
 	end
