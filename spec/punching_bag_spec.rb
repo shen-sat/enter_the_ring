@@ -20,7 +20,7 @@ describe 'PunchingBag' do
 
 		punching_bag.send(:pick_target)
 
-		expect(punching_bag.target).to eq(55) 
+		expect(punching_bag.target).to eq(87) 
 	end
 
 	describe '#set_punch' do
@@ -77,7 +77,8 @@ describe 'PunchingBag' do
 		before { allow(TTY::Prompt).to receive(:new).and_return(prompt) }
 
 		context 'when user selects retry' do
-			before do 
+			
+			before do
 				allow(prompt).to receive(:select).and_return(:retry)
 			end
 			

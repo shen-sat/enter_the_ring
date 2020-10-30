@@ -32,7 +32,7 @@ private
 	end
 
 	def pick_target
-		@target = rand(50..75)
+		@target = rand(50..90)
 	end
 
 	def intro_text
