@@ -10,7 +10,7 @@ class Match
 	end
 
 	def something_happens?
-		sleep 2
+		sleep [1, 2].sample
 
 		roll_die >= 5 ? true : false
 	end
@@ -27,14 +27,14 @@ class Match
 	end
 
 	def action
-		sleep 2
+		sleep [1, 2].sample
 
 		commentary.action(pressing_fighter, other_fighter)
 	end
 
-	def start
+	def start(fighter_one, fighter_two)
 		if something_happens?
-			set_fighters
+			set_fighters(fighter_one, fighter_two)
 			puts prelude_to_action
 			puts action
 		end
