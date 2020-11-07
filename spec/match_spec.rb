@@ -81,65 +81,10 @@ describe 'Match' do
 		end
 	end
 
-	describe '#reset_minigame' do
+	describe '#reset' do
 		it 'sets initiate_minigame to false' do
-			match.reset_minigame
+			match.reset
 			expect(match.initiate_minigame).to eq(false)
-		end
-	end
-
-	describe '#reset_player_counter_and_punch' do
-		before do
-			match.instance_variable_set(:@player_step_counter, 6)
-			match.instance_variable_set(:@player_punch_thrown, true)
-		end
-
-		it 'resets player-related attributes' do
-			match.reset_player_counter_and_punch
-
-			expect(match.player_step_counter).to eq(1)
-			expect(match.player_punch_thrown).to eq(false)
-		end
-	end
-
-	describe '#roll_punch_die' do
-		before do 
-			match.instance_variable_set(:@steps_for_punch, 6)
-			srand 1
-		end
-
-		it 'returns 6' do
-			expect(match.roll_punch_die).to eq(6)
-		end
-	end
-
-	describe '#throw_punch?' do
-		context 'when roll_punch_die is less or equal to player_step_counter' do
-			before do
-				allow(match).to receive(:roll_punch_die).and_return(1)
-				allow(match).to receive(:player_step_counter).and_return(1)
-			end
-			context 'when player_punch_thrown is false' do
-				before { match.instance_variable_set(:@player_punch_thrown, false) }
-				it 'returns true' do
-					expect(match.throw_punch?).to eq(true)
-				end
-			end
-			context 'when player_punch_thrown is true' do
-				before { match.instance_variable_set(:@player_punch_thrown, true) }
-				it 'returns false' do
-					expect(match.throw_punch?).to eq(false)
-				end
-			end			
-		end
-		context 'when roll_punch_die is greater than player_step_counter' do
-			before do
-				allow(match).to receive(:roll_punch_die).and_return(6)
-				allow(match).to receive(:player_step_counter).and_return(5)
-			end
-			it 'returns false' do
-				expect(match.throw_punch?).to eq(false)
-			end
 		end
 	end
 end

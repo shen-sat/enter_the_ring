@@ -1,22 +1,8 @@
 class Match
-	attr_reader :commentary, 
-							:pressing_fighter, 
-							:other_fighter, 
-							:initiate_minigame, 
-							:player_step_counter,
-							:player_punch_thrown,
-							:steps_for_punch,
-							:total_steps,
-							:punch_max
+	attr_reader :commentary, :pressing_fighter, :other_fighter, :initiate_minigame
 
 	def initialize(commentary)
 		@commentary = commentary
-		@total_steps = 18
-		@punch_max = 3
-		@steps_for_punch = total_steps/punch_max
-		@initiate_minigame = false
-		@player_step_counter = 1
-		@player_punch_thrown = false
 	end
 
 	def roll_die
@@ -46,21 +32,8 @@ class Match
 		commentary.action(pressing_fighter, other_fighter)
 	end
 
-	def reset_minigame
+	def reset
 		@initiate_minigame = false
-	end
-
-	def reset_player_counter_and_punch
-		@player_step_counter = 1
-		@player_punch_thrown = false
-	end
-
-	def roll_punch_die
-		rand(steps_for_punch) + 1
-	end
-
-	def throw_punch?
-		roll_punch_die <= player_step_counter && !player_punch_thrown
 	end
 
 	def start(fighter_one, fighter_two)
