@@ -80,11 +80,4 @@ describe 'Match' do
 			expect(match.action).to eq('An action line')
 		end
 	end
-
-	describe '#reset' do
-		it 'sets initiate_minigame to false' do
-			match.reset
-			expect(match.initiate_minigame).to eq(false)
-		end
-	end
 end
