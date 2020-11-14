@@ -4,6 +4,14 @@ describe 'Match' do
 	let(:commentary) { double() }
 	let(:match) { Match.new(commentary) }
 
+	describe 'attributes' do
+		it 'has correct values' do
+			expect(match.moments).to eq(6)
+			expect(match.punch).to eq(false)
+			expect(match.block_punch).to eq(false)
+		end
+	end
+
 	describe '#something_happens?' do
 		before { allow(match).to receive(:sleep) }
 
@@ -78,6 +86,66 @@ describe 'Match' do
 
 		it 'returns an action line' do
 			expect(match.action).to eq('An action line')
+		end
+	end
+
+	describe '#increment_player_counter' do
+		it 'increases player_counter by 1' do
+			expect{match.increment_player_counter}.to change{match.player_counter}.by(1)
+		end
+	end
+
+	describe '#reset_punch_ability' do
+		#TODO
+	end
+
+	describe '#moments' do
+		it 'should be 6' do
+			expect(match.moments).to eq(6)
+		end
+	end
+
+	describe '#decide_punch' do
+		context 'when punch_die returns 5' do
+			before { allow(match).to receive(:roll_die).with(6).and_return(5) }
+
+			context 'when player counter is more than roll_die' do
+				before { allow(match).to receive(:player_counter).and_return(6) }
+					it 'does not change punch' do
+						expect{match.decide_punch}.not_to change{match.punch}
+					end
+
+					it 'does not change block_punch' do
+						expect{match.decide_punch}.not_to change{match.block_punch}
+					end
+			end
+
+			context 'when player counter is less than or equal to roll_die' do
+				before { allow(match).to receive(:player_counter).and_return(5) }
+
+				context 'when block_punch is true' do
+					before { match.instance_variable_set(:@block_punch, true) }
+
+					it 'does not change punch' do
+						expect{match.decide_punch}.not_to change{match.punch}
+					end
+
+					it 'does not change block_punch' do
+						expect{match.decide_punch}.not_to change{match.block_punch}
+					end
+				end
+				context 'when block_punch is false' do
+					before { match.instance_variable_set(:@block_punch, false) }
+
+					it 'does changes punch' do
+						expect{match.decide_punch}.to change{match.punch}.to(true)
+					end
+
+					it 'changes block_punch' do
+						expect{match.decide_punch}.to change{match.block_punch}.to(true)
+					end
+				end
+			end
 		end
 	end
 end

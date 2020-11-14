@@ -1,12 +1,16 @@
 class Match
-	attr_reader :commentary, :pressing_fighter, :other_fighter
+	attr_reader :commentary, :pressing_fighter, :other_fighter, :player_counter, :punch, :block_punch, :moments
 
 	def initialize(commentary)
 		@commentary = commentary
+		@player_counter = 0
+		@moments = 6
+		@punch = false
+		@block_punch = false
 	end
 
-	def roll_die
-		(rand 6) + 1
+	def roll_die(max = 6)
+		(rand max) + 1
 	end
 
 	def something_happens?
@@ -31,4 +35,16 @@ class Match
 
 		commentary.action(pressing_fighter, other_fighter)
 	end
+
+	def increment_player_counter
+		@player_counter += 1
+	end
+
+	def decide_punch
+		if player_counter <= roll_die(moments) && !block_punch
+			@punch = true
+			@block_punch = true
+		end
+	end
+
 end
