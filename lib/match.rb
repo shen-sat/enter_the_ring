@@ -3,7 +3,7 @@ class Match
 
 	def initialize(commentary)
 		@commentary = commentary
-		@player_counter = 0
+		@player_counter = 1
 		@moments = 6
 		@punch = false
 		@block_punch = false
@@ -36,15 +36,24 @@ class Match
 		commentary.action(pressing_fighter, other_fighter)
 	end
 
-	def increment_player_counter
-		@player_counter += 1
+
+	def player_can_punch?
+		player_counter >= roll_die(moments) && !block_punch
 	end
 
 	def decide_punch
-		if player_counter <= roll_die(moments) && !block_punch
+		@punch = false if @punch
+
+		if player_can_punch?
 			@punch = true
 			@block_punch = true
 		end
-	end
 
+		if @player_counter >= moments
+			@player_counter = 1
+			@block_punch = false
+		else
+			@player_counter += 1
+		end 
+	end
 end
