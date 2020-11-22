@@ -184,4 +184,55 @@ describe 'Match' do
 			end
 		end
 	end
+
+	# def decide_punch
+	# 	@punch = false if @punch
+
+	# 	if player_can_punch?
+	# 		@punch = true
+	# 		@block_punch = true
+	# 	end
+
+	# 	if @player_counter >= moments
+	# 		@player_counter = 1
+	# 		@block_punch = false
+	# 	else
+	# 		@player_counter += 1
+	# 	end 
+	# end
+
+	context 'a game loop' do
+		#first roll_die is 3
+			# allow(match).to receive(:roll_die).and_return(3)
+			# match.decide_punch
+			# #Test: none of varibale should change, except player_counter which should go up by one
+			# #Then run decide.punch x 1 times
+			# #Test: @punch is true
+			# #Test: @block_punch is true
+			# #Test: @player_counter is 4
+			# #Then run decide.punch
+			# #Test: @punch is false
+			# #Test: @block_punch is true
+			# #Test: @player_counter is 5
+			# #Then run decide.punch
+			# #Test: @punch is false
+			# #Test: @block_punch is false
+			# #Test: @player_counter is 1
+		#--- I think we should immediately go into the next loop here as if teh game is running in realtime
+		#then roll_die is 6
+			# allow(match).to receive(:roll_die).and_return(6)
+			# match.decide_punch
+			# #Test: none of varibale should change, except player_counter which should go up by one
+			# #Then run decide.punch x 2 times
+			# #Test: none of varibale should change, except player_counter which should go up by two 
+			# #Then run decide.punch x another 2 times
+			# #Test: @punch is true
+			# #Test: @block_punch is false
+			# #Test: @player_counter is 1
+			# #Then run decide.punch
+			# #Test: @punch is false
+			# #Test: @block_punch is false
+			# #Test: @player_counter is 2
+
+	end
 end
