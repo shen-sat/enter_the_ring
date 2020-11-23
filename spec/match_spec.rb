@@ -90,149 +90,73 @@ describe 'Match' do
 		end
 	end
 
-	describe '#decide_punch' do
-		#TODO: look at what you did in dummy_spec.rb and do that here instead of the existing tests below
-		let(:moments) { match.moments }
+	context 'a game loop'
+		context 'when roll_die returns only 3' do
+			before { allow(match).to receive(:roll_die).and_return(3) }
+				it 'goes through game loop' do
+					match.decide_punch
 
-		context 'when player_counter is less than moments' do
-			before { match.instance_variable_set(:@player_counter, moments - 1) }
+					expect(match.punch).to eq(false)
+					expect(match.block_punch).to eq(false)
+					expect(match.player_counter).to eq(2)
 
-			it 'increments player_counter' do
-				expect{match.decide_punch}.to change{match.player_counter}.to(moments)
-			end
-			#beginning
-			context 'when block_punch is false' do
-				before { match.instance_variable_set(:@block_punch, false) }			
+					match.decide_punch
+
+					expect(match.punch).to eq(false)
+					expect(match.block_punch).to eq(false)
+					expect(match.player_counter).to eq(3)									
+
+					match.decide_punch
+
+					expect(match.punch).to eq(true)
+					expect(match.block_punch).to eq(true)
+					expect(match.player_counter).to eq(4)
+
+					match.decide_punch
+
+					expect(match.punch).to eq(false)
+					expect(match.block_punch).to eq(true)
+					expect(match.player_counter).to eq(5)
+
+					match.decide_punch
+
+					expect(match.punch).to eq(false)
+					expect(match.block_punch).to eq(true)
+					expect(match.player_counter).to eq(6)
+
+					match.decide_punch
+
+					expect(match.punch).to eq(false)
+					expect(match.block_punch).to eq(false)
+					expect(match.player_counter).to eq(1)
+				end
+		end
+		context 'when roll_die returns only 6' do
+			before { allow(match).to receive(:roll_die).and_return(6) }
+
+			it 'goes through game loop' do
+				match.decide_punch
 				
-				context 'when punch is false' do
-					before { match.instance_variable_set(:@punch, false) }
+				expect(match.punch).to eq(false)
+				expect(match.block_punch).to eq(false)
+				expect(match.player_counter).to eq(2)
 
-					context 'when player_counter is less than roll_die' do
-						before { allow(match).to receive(:roll_die).with(moments).and_return(moments) }
+				match.decide_punch #3
+				match.decide_punch #4
+				match.decide_punch #5
+				match.decide_punch #6
 
-						it 'does not change punch' do
-							expect{match.decide_punch}.not_to change{match.punch}
-						end
+				match.decide_punch
 
-						it 'does not change block_punch' do
-							expect{match.decide_punch}.not_to change{match.block_punch}
-						end
-					end
+				expect(match.punch).to eq(true)
+				expect(match.block_punch).to eq(false)
+				expect(match.player_counter).to eq(1)
 
-					context 'when player_counter is greater than or equal to roll_die' do
-						before { allow(match).to receive(:roll_die).with(moments).and_return(moments - 1) }
+				match.decide_punch
 
-						it 'changes punch to true' do
-							expect{match.decide_punch}.to change{match.punch}.to(true)
-						end
-
-						it 'changes block_punch to true' do
-							expect{match.decide_punch}.to change{match.block_punch}.to(true)
-						end
-					end
-				end
-			end
-			#first loop after punch has been executed
-			context 'when block_punch is true' do
-				before { match.instance_variable_set(:@block_punch, true) }
-				context 'when punch is true' do
-					before { match.instance_variable_set(:@punch, true) }
-
-					it 'changes punch to false' do
-						expect{match.decide_punch}.to change{match.punch}.to(false)
-					end
-
-					it 'does not change block_punch' do
-						expect{match.decide_punch}.not_to change{match.block_punch}
-					end
-				end
-				#next loop after punch has been executed
-				context 'when punch is false' do
-					before { match.instance_variable_set(:@punch, false) }					
-					it 'does not change punch' do
-						expect{match.decide_punch}.not_to change{match.punch}
-					end
-
-					it 'does not change block_punch' do
-						expect{match.decide_punch}.not_to change{match.block_punch}
-					end
-				end
+				expect(match.punch).to eq(false)
+				expect(match.block_punch).to eq(false)
+				expect(match.player_counter).to eq(2)
 			end
 		end
-		#final loop
-		context 'when player_counter is greater than or equal to moments' do
-			before { match.instance_variable_set(:@player_counter, moments) }
-
-			it 'sets player_counter to 1' do
-				expect{match.decide_punch}.to change{match.player_counter}.to(1)
-			end
-
-			context 'when block_punch is true' do
-				before { match.instance_variable_set(:@block_punch, true) }
-
-				context 'when punch is false' do
-					before { match.instance_variable_set(:@punch, false) }
-
-					it 'does not change punch' do
-						expect{match.decide_punch}.not_to change{match.punch}
-					end
-
-					it 'changes block_punch to false' do
-						expect{match.decide_punch}.to change{match.block_punch}.to(false)
-					end
-				end
-			end
-		end
-	end
-
-	# def decide_punch
-	# 	@punch = false if @punch
-
-	# 	if player_can_punch?
-	# 		@punch = true
-	# 		@block_punch = true
-	# 	end
-
-	# 	if @player_counter >= moments
-	# 		@player_counter = 1
-	# 		@block_punch = false
-	# 	else
-	# 		@player_counter += 1
-	# 	end 
-	# end
-
-	context 'a game loop' do
-		#first roll_die is 3
-			# allow(match).to receive(:roll_die).and_return(3)
-			# match.decide_punch
-			# #Test: none of varibale should change, except player_counter which should go up by one
-			# #Then run decide.punch x 1 times
-			# #Test: @punch is true
-			# #Test: @block_punch is true
-			# #Test: @player_counter is 4
-			# #Then run decide.punch
-			# #Test: @punch is false
-			# #Test: @block_punch is true
-			# #Test: @player_counter is 5
-			# #Then run decide.punch
-			# #Test: @punch is false
-			# #Test: @block_punch is false
-			# #Test: @player_counter is 1
-		#--- I think we should immediately go into the next loop here as if teh game is running in realtime
-		#then roll_die is 6
-			# allow(match).to receive(:roll_die).and_return(6)
-			# match.decide_punch
-			# #Test: none of varibale should change, except player_counter which should go up by one
-			# #Then run decide.punch x 2 times
-			# #Test: none of varibale should change, except player_counter which should go up by two 
-			# #Then run decide.punch x another 2 times
-			# #Test: @punch is true
-			# #Test: @block_punch is false
-			# #Test: @player_counter is 1
-			# #Then run decide.punch
-			# #Test: @punch is false
-			# #Test: @block_punch is false
-			# #Test: @player_counter is 2
-
-	end
 end
