@@ -1,12 +1,13 @@
 class Match
-	attr_reader :commentary, :pressing_fighter, :other_fighter, :player_counter, :punch, :block_punch, :moments
+	attr_reader :commentary, :pressing_fighter, :other_fighter, :player_store, :moments
 
 	def initialize(commentary)
 		@commentary = commentary
-		@player_counter = 1
+		@player_store = { punch: false, block_punch: false, counter: 1 }
+		# @player_counter = 1
 		@moments = 6
-		@punch = false
-		@block_punch = false
+		# @punch = false
+		# @block_punch = false
 	end
 
 	def roll_die(max = 6)
@@ -38,22 +39,22 @@ class Match
 
 
 	def player_can_punch?
-		player_counter >= roll_die(moments) && !block_punch
+		@player_store[:counter] >= roll_die(moments) && !@player_store[:block_punch]
 	end
 
 	def decide_punch
-		@punch = false if @punch
+		@player_store[:punch] = false if @player_store[:punch]
 
 		if player_can_punch?
-			@punch = true
-			@block_punch = true
+			@player_store[:punch] = true
+			@player_store[:block_punch] = true
 		end
 
-		if @player_counter >= moments
-			@player_counter = 1
-			@block_punch = false
+		if @player_store[:counter] >= moments
+			@player_store[:counter] = 1
+			@player_store[:block_punch] = false
 		else
-			@player_counter += 1
+			@player_store[:counter] += 1
 		end 
 	end
 end

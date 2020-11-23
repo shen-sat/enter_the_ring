@@ -7,9 +7,7 @@ describe 'Match' do
 	describe 'attributes' do
 		it 'has correct values' do
 			expect(match.moments).to eq(6)
-			expect(match.punch).to eq(false)
-			expect(match.block_punch).to eq(false)
-			expect(match.player_counter).to eq(1)
+			expect(match.player_store).to eq({ punch: false, block_punch: false, counter: 1 })
 		end
 	end
 
@@ -96,39 +94,39 @@ describe 'Match' do
 				it 'goes through game loop' do
 					match.decide_punch
 
-					expect(match.punch).to eq(false)
-					expect(match.block_punch).to eq(false)
-					expect(match.player_counter).to eq(2)
+					expect(match.player_store[:punch]).to eq(false)
+					expect(match.player_store[:block_punch]).to eq(false)
+					expect(match.player_store[:counter]).to eq(2)
 
 					match.decide_punch
 
-					expect(match.punch).to eq(false)
-					expect(match.block_punch).to eq(false)
-					expect(match.player_counter).to eq(3)									
+					expect(match.player_store[:punch]).to eq(false)
+					expect(match.player_store[:block_punch]).to eq(false)
+					expect(match.player_store[:counter]).to eq(3)									
 
 					match.decide_punch
 
-					expect(match.punch).to eq(true)
-					expect(match.block_punch).to eq(true)
-					expect(match.player_counter).to eq(4)
+					expect(match.player_store[:punch]).to eq(true)
+					expect(match.player_store[:block_punch]).to eq(true)
+					expect(match.player_store[:counter]).to eq(4)
 
 					match.decide_punch
 
-					expect(match.punch).to eq(false)
-					expect(match.block_punch).to eq(true)
-					expect(match.player_counter).to eq(5)
+					expect(match.player_store[:punch]).to eq(false)
+					expect(match.player_store[:block_punch]).to eq(true)
+					expect(match.player_store[:counter]).to eq(5)
 
 					match.decide_punch
 
-					expect(match.punch).to eq(false)
-					expect(match.block_punch).to eq(true)
-					expect(match.player_counter).to eq(6)
+					expect(match.player_store[:punch]).to eq(false)
+					expect(match.player_store[:block_punch]).to eq(true)
+					expect(match.player_store[:counter]).to eq(6)
 
 					match.decide_punch
 
-					expect(match.punch).to eq(false)
-					expect(match.block_punch).to eq(false)
-					expect(match.player_counter).to eq(1)
+					expect(match.player_store[:punch]).to eq(false)
+					expect(match.player_store[:block_punch]).to eq(false)
+					expect(match.player_store[:counter]).to eq(1)
 				end
 		end
 		context 'when roll_die returns only 6' do
@@ -137,9 +135,9 @@ describe 'Match' do
 			it 'goes through game loop' do
 				match.decide_punch
 				
-				expect(match.punch).to eq(false)
-				expect(match.block_punch).to eq(false)
-				expect(match.player_counter).to eq(2)
+				expect(match.player_store[:punch]).to eq(false)
+				expect(match.player_store[:block_punch]).to eq(false)
+				expect(match.player_store[:counter]).to eq(2)
 
 				match.decide_punch #3
 				match.decide_punch #4
@@ -148,15 +146,15 @@ describe 'Match' do
 
 				match.decide_punch
 
-				expect(match.punch).to eq(true)
-				expect(match.block_punch).to eq(false)
-				expect(match.player_counter).to eq(1)
+				expect(match.player_store[:punch]).to eq(true)
+				expect(match.player_store[:block_punch]).to eq(false)
+				expect(match.player_store[:counter]).to eq(1)
 
 				match.decide_punch
 
-				expect(match.punch).to eq(false)
-				expect(match.block_punch).to eq(false)
-				expect(match.player_counter).to eq(2)
+				expect(match.player_store[:punch]).to eq(false)
+				expect(match.player_store[:block_punch]).to eq(false)
+				expect(match.player_store[:counter]).to eq(2)
 			end
 		end
 end
