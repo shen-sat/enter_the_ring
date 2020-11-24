@@ -13,21 +13,44 @@ describe 'Match' do
 	end
 
 	describe '#something_happens?' do
-		before { allow(match).to receive(:sleep) }
+		let(:punch_set_to_true) { { punch: true, block_punch: false, counter: 1 } }
 
-		context 'when die roll is >= 5' do
-			before { allow(match).to receive(:roll_die).and_return(5) }
-			
+		before do 
+			allow(match).to receive(:sleep)
+			allow(match).to receive(:decide_punch)
+		end
+
+		context 'when player punch is true' do	
+			before { match.instance_variable_set(:@player_store, punch_set_to_true) }
+
 			it 'returns true' do
 				expect(match.something_happens?).to eq(true)
 			end
 		end
 
-		context 'when die roll is <= 4' do
-			before { allow(match).to receive(:roll_die).and_return(4) }
-			
-			it 'returns false' do
-				expect(match.something_happens?).to eq(false)
+		context 'when opponent punch is true' do
+			before { match.instance_variable_set(:@opponent_store, punch_set_to_true) }
+
+			it 'returns true' do
+				expect(match.something_happens?).to eq(true)
+			end
+		end
+
+		context 'when player and opponent punch are false' do
+			context 'when die roll is >= 5' do
+				before { allow(match).to receive(:roll_die).and_return(5) }
+				
+				it 'returns true' do
+					expect(match.something_happens?).to eq(true)
+				end
+			end
+
+			context 'when die roll is <= 4' do
+				before { allow(match).to receive(:roll_die).and_return(4) }
+				
+				it 'returns false' do
+					expect(match.something_happens?).to eq(false)
+				end
 			end
 		end
 	end

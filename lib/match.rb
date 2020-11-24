@@ -15,6 +15,9 @@ class Match
 	def something_happens?
 		sleep [1, 2].sample
 
+		decide_punch
+		return true if @player_store[:punch] || @opponent_store[:punch] 
+
 		roll_die >= 5 ? true : false
 	end
 
