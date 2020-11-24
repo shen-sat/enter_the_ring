@@ -8,6 +8,7 @@ describe 'Match' do
 		it 'has correct values' do
 			expect(match.moments).to eq(6)
 			expect(match.player_store).to eq({ punch: false, block_punch: false, counter: 1 })
+			expect(match.opponent_store).to eq({ punch: false, block_punch: false, counter: 1 })
 		end
 	end
 
