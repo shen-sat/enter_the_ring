@@ -62,13 +62,13 @@ describe 'Match' do
 		before { srand 1 }
 
 		it 'sets fighter_two as pressing_fighter' do
-			match.set_fighters(fighter_one, fighter_two)
+			match.set_fighters(player: fighter_one, opponent: fighter_two)
 
 			expect(match.pressing_fighter).to eq(fighter_two)
 		end
 
 		it 'sets fighter_one as other_fighter' do
-			match.set_fighters(fighter_one, fighter_two)
+			match.set_fighters(player: fighter_one, opponent: fighter_two)
 
 			expect(match.other_fighter).to eq(fighter_one)
 		end

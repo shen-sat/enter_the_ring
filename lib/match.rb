@@ -21,8 +21,8 @@ class Match
 		roll_die >= 5 ? true : false
 	end
 
-	def set_fighters(fighter_one, fighter_two)
-		fighters = [ fighter_one, fighter_two ]
+	def set_fighters(player:, opponent:)
+		fighters = [ player, opponent ]
 
 		@pressing_fighter = fighters.sample
 		@other_fighter = (fighters - [ pressing_fighter ]).first
