@@ -1,11 +1,12 @@
 class Match
-	attr_reader :commentary, :pressing_fighter, :other_fighter, :player_store, :opponent_store, :moments
+	attr_reader :commentary, :pressing_fighter, :other_fighter, :moments, :punch_data
 
 	def initialize(commentary)
 		@commentary = commentary
-		@player_store = { punch: false, block_punch: false, counter: 1 }
-		@opponent_store = { punch: false, block_punch: false, counter: 1 }
 		@moments = 6
+		player_data = { punch: false, block_punch: false, counter: 1 }
+		opponent_data = player_data.dup
+		@punch_data = [ player_data, opponent_data ]
 	end
 
 	def roll_die(max = 6)
@@ -16,7 +17,7 @@ class Match
 		sleep [1, 2].sample
 
 		decide_punch
-		return true if @player_store[:punch] || @opponent_store[:punch] 
+		return true if punch_data.any? { |data| data[:punch] }
 
 		roll_die >= 5 ? true : false
 	end
@@ -39,24 +40,24 @@ class Match
 	end
 
 
-	def player_can_punch?(fighter_store)
-		fighter_store[:counter] >= roll_die(moments) && !fighter_store[:block_punch]
+	def player_can_punch?(data)
+		data[:counter] >= roll_die(moments) && !data[:block_punch]
 	end
 
 	def decide_punch
-		[@player_store, @opponent_store].each do |fighter_store|
-			fighter_store[:punch] = false if fighter_store[:punch]
+		punch_data.each do |data|
+			data[:punch] = false if data[:punch]
 
-			if player_can_punch?(fighter_store)
-				fighter_store[:punch] = true
-				fighter_store[:block_punch] = true
+			if player_can_punch?(data)
+				data[:punch] = true
+				data[:block_punch] = true
 			end
 
-			if fighter_store[:counter] >= moments
-				fighter_store[:counter] = 1
-				fighter_store[:block_punch] = false
+			if data[:counter] >= moments
+				data[:counter] = 1
+				data[:block_punch] = false
 			else
-				fighter_store[:counter] += 1
+				data[:counter] += 1
 			end 
 		end
 		
