@@ -1,11 +1,12 @@
 class Match
 	attr_reader :commentary, :pressing_fighter, :other_fighter, :moments, :punch_data
 
-	def initialize(commentary)
+	def initialize(commentary, player, opponent)
 		@commentary = commentary
 		@moments = 6
-		player_data = { punch: false, block_punch: false, counter: 1 }
-		opponent_data = player_data.dup
+
+		player_data = { fighter: player, punch: false, block_punch: false, counter: 1 }
+		opponent_data = { fighter: opponent, punch: false, block_punch: false, counter: 1 }
 		@punch_data = [ player_data, opponent_data ]
 	end
 
@@ -22,25 +23,49 @@ class Match
 		roll_die >= 5 ? true : false
 	end
 
-	def set_fighters(player:, opponent:)
-		fighters = [ player, opponent ]
-
-		@pressing_fighter = fighters.sample
-		@other_fighter = (fighters - [ pressing_fighter ]).first
+	def pick_pressing_fighter
+		[ @punch_data.first[:fighter], @punch_data.last[:fighter] ].sample
 	end
 
-	def prelude_to_action
-		commentary.prelude(pressing_fighter, other_fighter)
+	def pick_receiving_fighter(pressing_fighter)
+		([ @punch_data.first[:fighter], @punch_data.last[:fighter] ] - [ pressing_fighter ]).first
 	end
 
-	def action
+	def prelude(pressing_fighter:, receiving_fighter:, punch: false)
 		sleep [1, 2].sample
 
-		commentary.action(pressing_fighter, other_fighter)
+		commentary.prelude(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: punch)
+	end
+
+	def action(pressing_fighter:, receiving_fighter:, punch: false)
+		sleep [1, 2].sample
+
+		commentary.action(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: punch)
+	end
+
+	def run_fluff_encounter
+		pressing_fighter = pick_pressing_fighter
+		receiving_fighter = pick_receiving_fighter(pressing_fighter)
+
+		prelude(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter)
+		action(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter)
+	end
+
+	def run_punch_encounter
+		puts punch_data
+		punch_data.each do |data|
+			if data[:punch]
+				pressing_fighter = data[:fighter]
+				receiving_fighter = pick_receiving_fighter(pressing_fighter)
+
+				prelude(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: true)
+				action(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: true)		
+			end
+		end
 	end
 
 
-	def player_can_punch?(data)
+	def fighter_can_punch?(data)
 		data[:counter] >= roll_die(moments) && !data[:block_punch]
 	end
 
@@ -48,7 +73,7 @@ class Match
 		punch_data.each do |data|
 			data[:punch] = false if data[:punch]
 
-			if player_can_punch?(data)
+			if fighter_can_punch?(data)
 				data[:punch] = true
 				data[:block_punch] = true
 			end
@@ -59,7 +84,7 @@ class Match
 			else
 				data[:counter] += 1
 			end 
-		end
-		
+		end		
 	end
+
 end

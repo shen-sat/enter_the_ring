@@ -2,15 +2,17 @@ require_relative '../lib/match'
 
 describe 'Match' do
 	let(:commentary) { double() }
-	let(:match) { Match.new(commentary) }
+	let(:player) { double('player') }
+	let(:opponent) { double('opponent') }
+	let(:match) { Match.new(commentary, player, opponent) }
 
 	describe 'attributes' do
 		it 'has correct values' do
 			expect(match.moments).to eq(6)
 
 			punch_data = { punch: false, block_punch: false, counter: 1 }
-			expect(match.punch_data.first).to eq(punch_data)
-			expect(match.punch_data.last).to eq(punch_data)
+			expect(match.punch_data.first).to eq(punch_data.merge(fighter: player))
+			expect(match.punch_data.last).to eq(punch_data.merge(fighter: opponent))
 		end
 	end
 
@@ -23,7 +25,7 @@ describe 'Match' do
 			allow(match).to receive(:decide_punch)
 		end
 
-		context 'when player punch is true' do	
+		context 'when player punch is true' do
 			before { match.instance_variable_set(:@punch_data, [punch_set_to_true, punch_set_to_false] ) }
 
 			it 'returns true' do
@@ -58,61 +60,71 @@ describe 'Match' do
 		end
 	end
 
-	describe '#set_fighters' do
-		let(:fighter_one) { double() }
-		let(:fighter_two) { double() }
-
-		before { srand 1 }
-
-		it 'sets fighter_two as pressing_fighter' do
-			match.set_fighters(player: fighter_one, opponent: fighter_two)
-
-			expect(match.pressing_fighter).to eq(fighter_two)
-		end
-
-		it 'sets fighter_one as other_fighter' do
-			match.set_fighters(player: fighter_one, opponent: fighter_two)
-
-			expect(match.other_fighter).to eq(fighter_one)
-		end
-	end
-
-	describe '#prelude_to_action' do
-		let(:pressing_fighter) { double() }
-		let(:other_fighter) { double() }
-		let(:prelude_line) { 'A prelude line' }
-
-
+	describe '#run_fluff_encounter' do
 		before do
-			allow(match).to receive(:pressing_fighter).and_return(pressing_fighter)
-			allow(match).to receive(:other_fighter).and_return(other_fighter)
-
-			allow(commentary).to receive(:prelude).with(pressing_fighter, other_fighter).and_return(prelude_line)
+			allow(match).to receive(:sleep)
+			allow(match).to receive(:pick_pressing_fighter).and_return(opponent)
 		end
 
-		it 'returns a prelude line' do
-			expect(match.prelude_to_action).to eq('A prelude line')
+		it 'calls commentary with correct params' do
+			expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: false)
+			expect(commentary).to receive(:action).with(pressing_fighter: opponent, receiving_fighter: player, punch: false)
+
+			match.run_fluff_encounter 
 		end
 	end
 
-	describe '#action' do
-		let(:pressing_fighter) { double() }
-		let(:other_fighter) { double() }
-		let(:action_line) { 'An action line' }
-
+	describe '#run_punch_encounter' do
+		let(:player_punch_data) { { fighter: player, punch: player_punch, block_punch: false, counter: 1 } }
+		let(:opponent_punch_data) { { fighter: opponent, punch: opponent_punch, block_punch: false, counter: 1 } }
 
 		before do
 			allow(match).to receive(:sleep)
 
-			allow(match).to receive(:pressing_fighter).and_return(pressing_fighter)
-			allow(match).to receive(:other_fighter).and_return(other_fighter)
-
-			allow(commentary).to receive(:action).with(pressing_fighter, other_fighter).and_return(action_line)
+			match.instance_variable_set(:@punch_data, [player_punch_data, opponent_punch_data])
 		end
 
-		it 'returns an action line' do
-			expect(match.action).to eq('An action line')
+		context 'when player punch is true' do
+			let(:player_punch) { true }
+			let(:opponent_punch) { false }
+
+			it 'calls commentary with correct params once for prelude and once for action' do
+				expect(commentary).to receive(:prelude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
+				expect(commentary).to receive(:action).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
+
+				match.run_punch_encounter
+			end
+
 		end
+
+		context 'when opponent punch is true' do
+			let(:player_punch) { false }
+			let(:opponent_punch) { true }
+
+			it 'calls commentary with correct params once for prelude and once for action' do
+				expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
+				expect(commentary).to receive(:action).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
+
+				match.run_punch_encounter 
+			end
+		end
+
+		context 'when both player and opponent punch are true' do
+			let(:player_punch) { true }
+			let(:opponent_punch) { true }
+
+			it 'calls commentary with correct params once for prelude and once for action' do
+				expect(commentary).to receive(:prelude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
+				expect(commentary).to receive(:action).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
+
+				expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
+				expect(commentary).to receive(:action).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
+
+				match.run_punch_encounter 
+			end
+		end
+
+		
 	end
 
 	context 'a game loop'
