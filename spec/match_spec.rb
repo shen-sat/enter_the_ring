@@ -8,7 +8,8 @@ describe 'Match' do
 
 	describe 'attributes' do
 		it 'has correct values' do
-			expect(match.moments).to eq(6)
+			expect(match.moments).to eq(10)
+			expect(match.ambient_action_score).to eq(4)
 
 			punch_data = { punch: false, block_punch: false, counter: 1 }
 			expect(match.punch_data.first).to eq(punch_data.merge(fighter: player))
@@ -42,8 +43,8 @@ describe 'Match' do
 		end
 
 		context 'when player and opponent punch are false' do
-			context 'when die roll is >= 5' do
-				before { allow(match).to receive(:roll_die).and_return(5) }
+			context 'when die roll is >= ambient_action_score' do
+				before { allow(match).to receive(:roll_die).and_return(match.ambient_action_score) }
 				
 				it 'returns true' do
 					expect(match.something_happens?).to eq(true)
@@ -51,7 +52,7 @@ describe 'Match' do
 			end
 
 			context 'when die roll is <= 4' do
-				before { allow(match).to receive(:roll_die).and_return(4) }
+				before { allow(match).to receive(:roll_die).and_return(match.ambient_action_score - 1) }
 				
 				it 'returns false' do
 					expect(match.something_happens?).to eq(false)
@@ -124,75 +125,57 @@ describe 'Match' do
 		end
 	end
 
-	describe '#decide_punches during a game loop'
+	describe '#decide_punches during a game loop' do
 		let(:player_punch_data) { match.punch_data.first }
 
-		context 'when roll_die returns only 3' do
-			before { allow(match).to receive(:roll_die).and_return(3) }
-				it 'goes through game loop' do
-					match.send(:decide_punches)
+		it 'when roll_die equals moments it goes through game loop' do
+			roll_die_result = match.moments
+			allow(match).to receive(:roll_die).and_return(roll_die_result)
 
-					expect(player_punch_data[:punch]).to eq(false)
-					expect(player_punch_data[:block_punch]).to eq(false)
-					expect(player_punch_data[:counter]).to eq(2)
-
-					match.send(:decide_punches)
-
-					expect(player_punch_data[:punch]).to eq(false)
-					expect(player_punch_data[:block_punch]).to eq(false)
-					expect(player_punch_data[:counter]).to eq(3)									
-
-					match.send(:decide_punches)
-
-					expect(player_punch_data[:punch]).to eq(true)
-					expect(player_punch_data[:block_punch]).to eq(true)
-					expect(player_punch_data[:counter]).to eq(4)
-
-					match.send(:decide_punches)
-
-					expect(player_punch_data[:punch]).to eq(false)
-					expect(player_punch_data[:block_punch]).to eq(true)
-					expect(player_punch_data[:counter]).to eq(5)
-
-					match.send(:decide_punches)
-
-					expect(player_punch_data[:punch]).to eq(false)
-					expect(player_punch_data[:block_punch]).to eq(true)
-					expect(player_punch_data[:counter]).to eq(6)
-
-					match.send(:decide_punches)
-
-					expect(player_punch_data[:punch]).to eq(false)
-					expect(player_punch_data[:block_punch]).to eq(false)
-					expect(player_punch_data[:counter]).to eq(1)
-				end
-		end
-		context 'when roll_die returns only 6' do
-			before { allow(match).to receive(:roll_die).and_return(6) }
-
-			it 'goes through game loop' do
-				match.send(:decide_punches)
-				
-				expect(player_punch_data[:punch]).to eq(false)
-				expect(player_punch_data[:block_punch]).to eq(false)
-				expect(player_punch_data[:counter]).to eq(2)
-
-				match.send(:decide_punches) #3
-				match.send(:decide_punches) #4
-				match.send(:decide_punches) #5
-				match.send(:decide_punches) #6
-
-				match.send(:decide_punches)
-
-				expect(player_punch_data[:punch]).to eq(true)
-				expect(player_punch_data[:block_punch]).to eq(false)
-				expect(player_punch_data[:counter]).to eq(1)
+			(roll_die_result - 1).times do
+				counter = player_punch_data[:counter]
 
 				match.send(:decide_punches)
 
 				expect(player_punch_data[:punch]).to eq(false)
 				expect(player_punch_data[:block_punch]).to eq(false)
-				expect(player_punch_data[:counter]).to eq(2)
+				expect(player_punch_data[:counter]).to eq(counter + 1)
 			end
+
+			match.send(:decide_punches)
+			expect(player_punch_data[:punch]).to eq(true)
+			expect(player_punch_data[:block_punch]).to eq(false)
+			expect(player_punch_data[:counter]).to eq(1)
+
+			match.send(:decide_punches)
+			expect(player_punch_data[:punch]).to eq(false)
+			expect(player_punch_data[:block_punch]).to eq(false)
+			expect(player_punch_data[:counter]).to eq(2)
 		end
+
+		it 'when roll_die is one less than moments it goes through game loop' do
+			roll_die_result = match.moments - 1
+			allow(match).to receive(:roll_die).and_return(roll_die_result)
+
+			(roll_die_result - 1).times do
+				counter = player_punch_data[:counter]
+
+				match.send(:decide_punches)
+
+				expect(player_punch_data[:punch]).to eq(false)
+				expect(player_punch_data[:block_punch]).to eq(false)
+				expect(player_punch_data[:counter]).to eq(counter + 1)
+			end
+
+			match.send(:decide_punches)
+			expect(player_punch_data[:punch]).to eq(true)
+			expect(player_punch_data[:block_punch]).to eq(true)
+			expect(player_punch_data[:counter]).to eq(match.moments)
+
+			match.send(:decide_punches)
+			expect(player_punch_data[:punch]).to eq(false)
+			expect(player_punch_data[:block_punch]).to eq(false)
+			expect(player_punch_data[:counter]).to eq(1)
+		end
+	end
 end
