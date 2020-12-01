@@ -14,13 +14,13 @@ class Match
 		sleep [1, 2].sample
 
 		decide_punches
-		return true if punch_data.any? { |data| data[:punch] }
+		return true if any_fighters_want_to_punch?
 
 		roll_die >= 5 ? true : false
 	end
 
 	def encounter
-		punch_data.any? { |data| data[:punch] } ? run_punch_encounter : run_fluff_encounter
+		any_fighters_want_to_punch? ? run_punch_encounter : run_fluff_encounter
 	end
 
 private
@@ -49,6 +49,10 @@ private
 
 	def roll_die(max = 6)
 		(rand max) + 1
+	end
+
+	def any_fighters_want_to_punch?
+		punch_data.any? { |data| data[:punch] }
 	end
 
 	def run_fluff_encounter
