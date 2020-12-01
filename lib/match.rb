@@ -52,7 +52,6 @@ class Match
 	end
 
 	def run_punch_encounter
-		puts punch_data
 		punch_data.each do |data|
 			if data[:punch]
 				pressing_fighter = data[:fighter]
@@ -62,6 +61,10 @@ class Match
 				action(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: true)		
 			end
 		end
+	end
+
+	def encounter
+		punch_data.any? { |data| data[:punch] } ? run_punch_encounter : run_fluff_encounter
 	end
 
 

@@ -60,21 +60,7 @@ describe 'Match' do
 		end
 	end
 
-	describe '#run_fluff_encounter' do
-		before do
-			allow(match).to receive(:sleep)
-			allow(match).to receive(:pick_pressing_fighter).and_return(opponent)
-		end
-
-		it 'calls commentary with correct params' do
-			expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: false)
-			expect(commentary).to receive(:action).with(pressing_fighter: opponent, receiving_fighter: player, punch: false)
-
-			match.run_fluff_encounter 
-		end
-	end
-
-	describe '#run_punch_encounter' do
+	describe '#encounter' do
 		let(:player_punch_data) { { fighter: player, punch: player_punch, block_punch: false, counter: 1 } }
 		let(:opponent_punch_data) { { fighter: opponent, punch: opponent_punch, block_punch: false, counter: 1 } }
 
@@ -84,50 +70,61 @@ describe 'Match' do
 			match.instance_variable_set(:@punch_data, [player_punch_data, opponent_punch_data])
 		end
 
-		context 'when player punch is true' do
+		context 'when player has punch true' do
 			let(:player_punch) { true }
 			let(:opponent_punch) { false }
 
-			it 'calls commentary with correct params once for prelude and once for action' do
+			it 'calls commentary with correct params' do
 				expect(commentary).to receive(:prelude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
 				expect(commentary).to receive(:action).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
 
-				match.run_punch_encounter
+				match.encounter
 			end
-
 		end
 
-		context 'when opponent punch is true' do
+		context 'when opponent has punch true' do
 			let(:player_punch) { false }
 			let(:opponent_punch) { true }
 
-			it 'calls commentary with correct params once for prelude and once for action' do
+			it 'calls commentary with correct params' do
 				expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 				expect(commentary).to receive(:action).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 
-				match.run_punch_encounter 
+				match.encounter
 			end
 		end
 
-		context 'when both player and opponent punch are true' do
+		context 'when both fighters have punch true' do
 			let(:player_punch) { true }
 			let(:opponent_punch) { true }
 
-			it 'calls commentary with correct params once for prelude and once for action' do
+			it 'calls commentary with correct params twice for prelude and twice for action' do
 				expect(commentary).to receive(:prelude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
 				expect(commentary).to receive(:action).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
 
 				expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 				expect(commentary).to receive(:action).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 
-				match.run_punch_encounter 
+				match.encounter 
 			end
 		end
 
-		
+		context 'when no fighters have punch true' do
+			let(:player_punch) { false }
+			let(:opponent_punch) { false }
+
+			before { allow(match).to receive(:pick_pressing_fighter).and_return(opponent) }
+
+			it 'calls commentary with correct params once for prelude and once for action' do
+				expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: false).once
+				expect(commentary).to receive(:action).with(pressing_fighter: opponent, receiving_fighter: player, punch: false).once
+
+				match.encounter 
+			end
+		end
 	end
 
-	context 'a game loop'
+	describe '#decide_punch during a game loop'
 		let(:player_punch_data) { match.punch_data.first }
 
 		context 'when roll_die returns only 3' do
