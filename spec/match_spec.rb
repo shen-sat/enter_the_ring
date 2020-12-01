@@ -22,7 +22,7 @@ describe 'Match' do
 
 		before do 
 			allow(match).to receive(:sleep)
-			allow(match).to receive(:decide_punch)
+			allow(match).to receive(:decide_punches)
 		end
 
 		context 'when player punch is true' do
@@ -124,43 +124,43 @@ describe 'Match' do
 		end
 	end
 
-	describe '#decide_punch during a game loop'
+	describe '#decide_punches during a game loop'
 		let(:player_punch_data) { match.punch_data.first }
 
 		context 'when roll_die returns only 3' do
 			before { allow(match).to receive(:roll_die).and_return(3) }
 				it 'goes through game loop' do
-					match.decide_punch
+					match.send(:decide_punches)
 
 					expect(player_punch_data[:punch]).to eq(false)
 					expect(player_punch_data[:block_punch]).to eq(false)
 					expect(player_punch_data[:counter]).to eq(2)
 
-					match.decide_punch
+					match.send(:decide_punches)
 
 					expect(player_punch_data[:punch]).to eq(false)
 					expect(player_punch_data[:block_punch]).to eq(false)
 					expect(player_punch_data[:counter]).to eq(3)									
 
-					match.decide_punch
+					match.send(:decide_punches)
 
 					expect(player_punch_data[:punch]).to eq(true)
 					expect(player_punch_data[:block_punch]).to eq(true)
 					expect(player_punch_data[:counter]).to eq(4)
 
-					match.decide_punch
+					match.send(:decide_punches)
 
 					expect(player_punch_data[:punch]).to eq(false)
 					expect(player_punch_data[:block_punch]).to eq(true)
 					expect(player_punch_data[:counter]).to eq(5)
 
-					match.decide_punch
+					match.send(:decide_punches)
 
 					expect(player_punch_data[:punch]).to eq(false)
 					expect(player_punch_data[:block_punch]).to eq(true)
 					expect(player_punch_data[:counter]).to eq(6)
 
-					match.decide_punch
+					match.send(:decide_punches)
 
 					expect(player_punch_data[:punch]).to eq(false)
 					expect(player_punch_data[:block_punch]).to eq(false)
@@ -171,24 +171,24 @@ describe 'Match' do
 			before { allow(match).to receive(:roll_die).and_return(6) }
 
 			it 'goes through game loop' do
-				match.decide_punch
+				match.send(:decide_punches)
 				
 				expect(player_punch_data[:punch]).to eq(false)
 				expect(player_punch_data[:block_punch]).to eq(false)
 				expect(player_punch_data[:counter]).to eq(2)
 
-				match.decide_punch #3
-				match.decide_punch #4
-				match.decide_punch #5
-				match.decide_punch #6
+				match.send(:decide_punches) #3
+				match.send(:decide_punches) #4
+				match.send(:decide_punches) #5
+				match.send(:decide_punches) #6
 
-				match.decide_punch
+				match.send(:decide_punches)
 
 				expect(player_punch_data[:punch]).to eq(true)
 				expect(player_punch_data[:block_punch]).to eq(false)
 				expect(player_punch_data[:counter]).to eq(1)
 
-				match.decide_punch
+				match.send(:decide_punches)
 
 				expect(player_punch_data[:punch]).to eq(false)
 				expect(player_punch_data[:block_punch]).to eq(false)
