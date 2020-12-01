@@ -1,13 +1,18 @@
 class Match
-	attr_reader :commentary, :moments, :punch_data
+	attr_reader :commentary, :moments, :punch_data, :ambient_action_score
 
 	def initialize(commentary, player, opponent)
 		@commentary = commentary
-		@moments = 6
+		@moments = 10
+		@ambient_action_score = 4
 
 		player_data = { fighter: player, punch: false, block_punch: false, counter: 1 }
 		opponent_data = { fighter: opponent, punch: false, block_punch: false, counter: 1 }
 		@punch_data = [ player_data, opponent_data ]
+	end
+
+	def run
+		30.times { encounter if something_happens? }
 	end
 
 	def something_happens?
@@ -16,7 +21,7 @@ class Match
 		decide_punches
 		return true if any_fighters_want_to_punch?
 
-		roll_die >= 5 ? true : false
+		roll_die >= ambient_action_score ? true : false
 	end
 
 	def encounter
@@ -94,5 +99,27 @@ private
 
 		commentary.action(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: punch)
 	end
-
 end
+
+# class Commentary
+# 	def prelude(pressing_fighter:, receiving_fighter:, punch:)
+# 		if punch
+# 			puts "#{pressing_fighter} winds up for a big punch!"
+# 		else
+# 			puts "#{pressing_fighter} throws a jab"
+# 		end
+# 	end
+
+# 	def action(pressing_fighter:, receiving_fighter:, punch:)
+# 		if punch
+# 			puts "#{pressing_fighter} lands a sweet haymaker!"
+# 		else
+# 			puts "#{receiving_fighter} ducks and moves away"
+# 		end
+# 	end
+# end
+
+# commentary = Commentary.new
+
+# Match.new(commentary,'Edgar','Mendes').run
+
