@@ -1,8 +1,9 @@
 class Match
-	attr_reader :commentary, :moments, :punch_data, :ambient_action_score
+	attr_reader :commentary, :target, :moments, :punch_data, :ambient_action_score
 
-	def initialize(commentary, player, opponent)
+	def initialize(commentary, target, player, opponent)
 		@commentary = commentary
+		@target = target
 		@moments = 10
 		@ambient_action_score = 4
 
@@ -75,7 +76,11 @@ private
 				receiving_fighter = pick_receiving_fighter(pressing_fighter)
 
 				prelude(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: true)
-				action(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: true)		
+
+				#if player, then run target.punch to determine if action is punch or failed punch, else it is punch true for opponent
+				punch = (data == punch_data.first ? target.punch : true)
+
+				action(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: punch)		
 			end
 		end
 	end

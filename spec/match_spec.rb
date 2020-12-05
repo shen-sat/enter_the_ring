@@ -2,9 +2,10 @@ require_relative '../lib/match'
 
 describe 'Match' do
 	let(:commentary) { double() }
+	let(:target) { double() }
 	let(:player) { double('player') }
 	let(:opponent) { double('opponent') }
-	let(:match) { Match.new(commentary, player, opponent) }
+	let(:match) { Match.new(commentary, target, player, opponent) }
 
 	describe 'attributes' do
 		it 'has correct values' do
@@ -67,6 +68,7 @@ describe 'Match' do
 
 		before do
 			allow(match).to receive(:sleep)
+			allow(target).to receive(:punch)
 
 			match.instance_variable_set(:@punch_data, [player_punch_data, opponent_punch_data])
 		end
@@ -75,11 +77,34 @@ describe 'Match' do
 			let(:player_punch) { true }
 			let(:opponent_punch) { false }
 
-			it 'calls commentary with correct params' do
+			it 'calls prelude commentary with correct params' do
+				allow(commentary).to receive(:action)
+
 				expect(commentary).to receive(:prelude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
-				expect(commentary).to receive(:action).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
 
 				match.encounter
+			end
+			context 'when player hits target' do
+				before { allow(target).to receive(:punch).and_return(true) }
+
+				it 'calls action commentary with correct params' do
+					allow(commentary).to receive(:prelude)
+
+					expect(commentary).to receive(:action).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
+
+					match.encounter
+				end
+			end
+			context 'when player misses target' do
+				before { allow(target).to receive(:punch).and_return(false) }
+
+				it 'calls action commentary with correct params' do
+					allow(commentary).to receive(:prelude)
+
+					expect(commentary).to receive(:action).with(pressing_fighter: player, receiving_fighter: opponent, punch: false).once
+
+					match.encounter
+				end
 			end
 		end
 
@@ -99,14 +124,32 @@ describe 'Match' do
 			let(:player_punch) { true }
 			let(:opponent_punch) { true }
 
-			it 'calls commentary with correct params twice for prelude and twice for action' do
-				expect(commentary).to receive(:prelude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
-				expect(commentary).to receive(:action).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
+			context 'when player hits target' do
+				before { allow(target).to receive(:punch).and_return(true) }
 
-				expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
-				expect(commentary).to receive(:action).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
+				it 'calls commentary for player once with correct params' do
+					expect(commentary).to receive(:prelude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
+					expect(commentary).to receive(:action).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
 
-				match.encounter 
+					expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
+					expect(commentary).to receive(:action).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
+
+					match.encounter
+				end
+			end
+
+			context 'when player misses target' do
+				before { allow(target).to receive(:punch).and_return(false) }
+
+				it 'calls commentary for player once with correct params' do
+					expect(commentary).to receive(:prelude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
+					expect(commentary).to receive(:action).with(pressing_fighter: player, receiving_fighter: opponent, punch: false).once
+
+					expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
+					expect(commentary).to receive(:action).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
+
+					match.encounter
+				end
 			end
 		end
 
