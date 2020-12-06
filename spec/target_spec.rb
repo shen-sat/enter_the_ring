@@ -58,32 +58,16 @@ describe 'Target' do
 		context 'when bag is hit' do
 			before { allow(target).to receive(:hit?).and_return(true) }
 
-			context 'when match is false' do
-				it 'puts it was hit' do
-					expect(target.send(:result, false)).to eq('You got 99 - good punch!')
-				end
-			end
-
-			context 'when match is true' do
-				it 'returns true' do
-					expect(target.send(:result, true)).to eq(true)
-				end
+			it 'puts it was hit' do
+				expect(target.send(:result)).to eq('You got 99 - good punch!')
 			end
 		end
 
 		context 'when bag is missed' do
 			before { allow(target).to receive(:hit?).and_return(false) }
 
-			context 'when match is false' do
-				it 'puts it was not hit' do
-					expect(target.send(:result, false)).to eq('You got 99 - you missed the bag!')
-				end
-			end
-
-			context 'when match is true' do
-				it 'returns false' do
-					expect(target.send(:result, true)).to eq(false)
-				end
+			it 'puts it was not hit' do
+				expect(target.send(:result)).to eq('You got 99 - you missed the bag!')
 			end
 		end
 	end
@@ -107,40 +91,46 @@ describe 'Target' do
 	end
 
 	describe '#punch' do
+		let(:hit_outcome) { double(:hit_outcome) }
 		before do
 			allow(target).to receive(:clear_screen)
 			allow(target).to receive(:set_bullseye)
 			allow(target).to receive(:intro_text)
 			allow(target).to receive(:throw_fist)
-			allow(target).to receive(:result)
+
+			allow(target).to receive(:hit?).and_return(hit_outcome)
 		end
 
-		context 'when match is false' do
-			let(:match) { false }
+		context 'when match is true (ie we are in a fight)' do
+			let(:match) { true }
 
 			before { allow(target).to receive(:show_options) }
 
-			it 'executes the correct behaviour' do
+			it 'executes the correct behaviour and returns the correct value' do
 				expect(target).to receive(:clear_screen)
 				expect(target).to receive(:set_bullseye)
 				expect(target).to receive(:throw_fist)
-				expect(target).to receive(:result).with(false)
-				expect(target).to receive(:show_options)
-
-				target.punch(match: match)
-			end	
-		end
-		context 'when match is false' do
-			let(:match) { true }
-
-			it 'executes the correct behaviour' do
-				expect(target).to receive(:clear_screen)
-				expect(target).to receive(:set_bullseye)
-				expect(target).to receive(:throw_fist)
-				expect(target).to receive(:result).with(true)
+				expect(target).not_to receive(:result)
 				expect(target).not_to receive(:show_options)
 
-				target.punch(match: match)
+				outcome = target.punch(match: match)
+				expect(outcome).to eq(hit_outcome)
+			end	
+		end
+
+		context 'when match is false (ie we are in the gym)' do
+			let(:match) { false }
+			before { allow(target).to receive(:score).and_return(60) }
+
+			it 'executes the correct behaviour and returns the correct value' do
+				expect(target).to receive(:clear_screen)
+				expect(target).to receive(:set_bullseye)
+				expect(target).to receive(:throw_fist)
+				expect(target).to receive(:result)
+				expect(target).to receive(:show_options)
+
+				outcome = target.punch(match: match)
+				expect(outcome).to eq(nil)
 			end	
 		end
 	end

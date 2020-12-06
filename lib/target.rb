@@ -20,9 +20,11 @@ class Target
 
 		throw_fist
 
-		result(match)
+		return hit? if match
+		
+		result
 
-		show_options unless match
+		show_options
 	end
 
 private
@@ -45,9 +47,7 @@ private
 	end
 
 	#This will change depending on if we are in gym or in match
-	def result(match)
-		return hit? if match
-
+	def result
 		output = "You got #{score} - "
 		output + (hit? ? 'good punch!' : 'you missed the bag!')
 	end
