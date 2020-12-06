@@ -109,7 +109,7 @@ end
 # class Commentary
 # 	def prelude(pressing_fighter:, receiving_fighter:, punch:)
 # 		if punch
-# 			puts "#{pressing_fighter} winds up for a big punch!"
+# 			puts "#{pressing_fighter} winds up for a MASSIVE punch!"
 # 		else
 # 			puts "#{pressing_fighter} throws a jab"
 # 		end
@@ -117,14 +117,23 @@ end
 
 # 	def action(pressing_fighter:, receiving_fighter:, punch:)
 # 		if punch
-# 			puts "#{pressing_fighter} lands a sweet haymaker!"
+# 			puts "#{pressing_fighter} lands a SWEET haymaker!"
 # 		else
 # 			puts "#{receiving_fighter} ducks and moves away"
 # 		end
 # 	end
 # end
 
-# commentary = Commentary.new
+# class Target
+# 	def punch
+# 		puts 'x for punch, m for miss'
+# 		answer = gets.chomp
+# 		answer == 'x' ? true : false
+# 	end
+# end
 
-# Match.new(commentary,'Edgar','Mendes').run
+# commentary = Commentary.new
+# target = Target.new
+
+# Match.new(commentary,target,'Edgar','Mendes').run
 
