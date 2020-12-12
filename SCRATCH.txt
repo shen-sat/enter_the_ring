@@ -1,3 +1,37 @@
+NEXT:
+- a constant roll_die with a default 6 value
+	- replace existing roll_die in Match
+- create method punch in Fighter class
+	- uses roll_die const, using total rank (eg 10) and if >= self rank
+	- returns true or false
+- create player class
+	- initialize with target
+	- inherit from Fighter class
+	- override punch method
+		- do target stuff and return true/false
+- rewrite run_punch_encounter
+	- remove target from match
+	- run fighter.punch instead of target.punch
+	- return fighter if fighter.punch is true other return nothing
+- rename Match to Round
+- create a Match class that initialses with Round
+	-	Match calls round.something_happens?
+	- Match calls round.encounter
+	- if round.encounter returns a fighter, add fighter to Match score 
+
+
 TODO:
 - in a match, when punch is true for opponent, they always hit:
-	- maybe they should only be successful a set number of times, depending on rank (KISS)	
+	- maybe they should only be successful a set number of times, depending on rank (KISS)
+- grudge: another attribute that randomlt develops after a fight. The next trash talk will take this attribute into account
+ - maybe we offer a player a faux choice - how they respond to a fighter post-fight always results in a grudge, but chooses the flavor of grudge (disrespect/something comes out about the coach/pandering to fans)
+ - stuff to lookup for trash talk and highlights
+	- age
+	- no_of_fights
+	- last_fight_result
+	- last_fight_MO
+	- streak
+ 
+
+	DONT WORRY:
+	- about converting a csv for ruby game - just feed game ahash with limited lines. Save working out converting csv for Lua!
