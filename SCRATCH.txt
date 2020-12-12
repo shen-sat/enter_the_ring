@@ -1,6 +1,6 @@
 NEXT:
-- a constant roll_die with a default 6 value
-	- replace existing roll_die in Match
+- a constant roll_die with a default 6 value -- DONE
+	- replace existing roll_die in Match -- DONE
 - create method punch in Fighter class
 	- uses roll_die const, using total rank (eg 10) and if >= self rank
 	- returns true or false

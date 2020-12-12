@@ -45,7 +45,7 @@ describe 'Match' do
 
 		context 'when player and opponent punch are false' do
 			context 'when die roll is >= ambient_action_score' do
-				before { allow(match).to receive(:roll_die).and_return(match.ambient_action_score) }
+				before { allow(SharedMethods).to receive(:roll_die).and_return(match.ambient_action_score) }
 				
 				it 'returns true' do
 					expect(match.something_happens?).to eq(true)
@@ -53,7 +53,7 @@ describe 'Match' do
 			end
 
 			context 'when die roll is <= 4' do
-				before { allow(match).to receive(:roll_die).and_return(match.ambient_action_score - 1) }
+				before { allow(SharedMethods).to receive(:roll_die).and_return(match.ambient_action_score - 1) }
 				
 				it 'returns false' do
 					expect(match.something_happens?).to eq(false)
@@ -173,7 +173,7 @@ describe 'Match' do
 
 		it 'when roll_die equals moments it goes through game loop' do
 			roll_die_result = match.moments
-			allow(match).to receive(:roll_die).and_return(roll_die_result)
+			allow(SharedMethods).to receive(:roll_die).and_return(roll_die_result)
 
 			(roll_die_result - 1).times do
 				counter = player_punch_data[:counter]
@@ -198,7 +198,7 @@ describe 'Match' do
 
 		it 'when roll_die is one less than moments it goes through game loop' do
 			roll_die_result = match.moments - 1
-			allow(match).to receive(:roll_die).and_return(roll_die_result)
+			allow(SharedMethods).to receive(:roll_die).and_return(roll_die_result)
 
 			(roll_die_result - 1).times do
 				counter = player_punch_data[:counter]

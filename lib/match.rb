@@ -1,3 +1,5 @@
+require_relative '../lib/shared_methods'
+
 class Match
 	attr_reader :commentary, :target, :moments, :punch_data, :ambient_action_score
 
@@ -22,7 +24,7 @@ class Match
 		decide_punches
 		return true if any_fighters_want_to_punch?
 
-		roll_die >= ambient_action_score ? true : false
+		SharedMethods.roll_die >= ambient_action_score ? true : false
 	end
 
 	def encounter
@@ -50,11 +52,7 @@ private
 	end
 
 	def fighter_chooses_to_punch?(data)
-		data[:counter] >= roll_die(moments) && !data[:block_punch]
-	end
-
-	def roll_die(max = 6)
-		(rand max) + 1
+		data[:counter] >= SharedMethods.roll_die(moments) && !data[:block_punch]
 	end
 
 	def any_fighters_want_to_punch?
