@@ -66,7 +66,7 @@ private
 		receiving_fighter = pick_receiving_fighter(pressing_fighter)
 
 		prelude(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter)
-		action(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter)
+		postlude(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter)
 	end
 
 	def run_punch_encounter
@@ -77,10 +77,10 @@ private
 
 				prelude(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: true)
 
-				#if player, then run target.punch to determine if action is punch or failed punch, else it is punch true for opponent
+				#if player, then run target.punch to determine if postlude is punch or failed punch, else it is punch true for opponent
 				punch = (data == punch_data.first ? target.punch : true)
 
-				action(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: punch)		
+				postlude(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: punch)		
 			end
 		end
 	end
@@ -99,10 +99,10 @@ private
 		commentary.prelude(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: punch)
 	end
 
-	def action(pressing_fighter:, receiving_fighter:, punch: false)
+	def postlude(pressing_fighter:, receiving_fighter:, punch: false)
 		sleep [1, 2].sample
 
-		commentary.action(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: punch)
+		commentary.postlude(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: punch)
 	end
 end
 
@@ -115,7 +115,7 @@ end
 # 		end
 # 	end
 
-# 	def action(pressing_fighter:, receiving_fighter:, punch:)
+# 	def postlude(pressing_fighter:, receiving_fighter:, punch:)
 # 		if punch
 # 			puts "#{pressing_fighter} lands a SWEET haymaker!"
 # 		else

@@ -78,7 +78,7 @@ describe 'Match' do
 			let(:opponent_punch) { false }
 
 			it 'calls prelude commentary with correct params' do
-				allow(commentary).to receive(:action)
+				allow(commentary).to receive(:postlude)
 
 				expect(commentary).to receive(:prelude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
 
@@ -87,10 +87,10 @@ describe 'Match' do
 			context 'when player hits target' do
 				before { allow(target).to receive(:punch).and_return(true) }
 
-				it 'calls action commentary with correct params' do
+				it 'calls postlude commentary with correct params' do
 					allow(commentary).to receive(:prelude)
 
-					expect(commentary).to receive(:action).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
+					expect(commentary).to receive(:postlude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
 
 					match.encounter
 				end
@@ -98,10 +98,10 @@ describe 'Match' do
 			context 'when player misses target' do
 				before { allow(target).to receive(:punch).and_return(false) }
 
-				it 'calls action commentary with correct params' do
+				it 'calls postlude commentary with correct params' do
 					allow(commentary).to receive(:prelude)
 
-					expect(commentary).to receive(:action).with(pressing_fighter: player, receiving_fighter: opponent, punch: false).once
+					expect(commentary).to receive(:postlude).with(pressing_fighter: player, receiving_fighter: opponent, punch: false).once
 
 					match.encounter
 				end
@@ -114,7 +114,7 @@ describe 'Match' do
 
 			it 'calls commentary with correct params' do
 				expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
-				expect(commentary).to receive(:action).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
+				expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 
 				match.encounter
 			end
@@ -129,10 +129,10 @@ describe 'Match' do
 
 				it 'calls commentary for player once with correct params' do
 					expect(commentary).to receive(:prelude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
-					expect(commentary).to receive(:action).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
+					expect(commentary).to receive(:postlude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
 
 					expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
-					expect(commentary).to receive(:action).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
+					expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 
 					match.encounter
 				end
@@ -143,10 +143,10 @@ describe 'Match' do
 
 				it 'calls commentary for player once with correct params' do
 					expect(commentary).to receive(:prelude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
-					expect(commentary).to receive(:action).with(pressing_fighter: player, receiving_fighter: opponent, punch: false).once
+					expect(commentary).to receive(:postlude).with(pressing_fighter: player, receiving_fighter: opponent, punch: false).once
 
 					expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
-					expect(commentary).to receive(:action).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
+					expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 
 					match.encounter
 				end
@@ -159,9 +159,9 @@ describe 'Match' do
 
 			before { allow(match).to receive(:pick_pressing_fighter).and_return(opponent) }
 
-			it 'calls commentary with correct params once for prelude and once for action' do
+			it 'calls commentary with correct params once for prelude and once for postlude' do
 				expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: false).once
-				expect(commentary).to receive(:action).with(pressing_fighter: opponent, receiving_fighter: player, punch: false).once
+				expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: false).once
 
 				match.encounter 
 			end
