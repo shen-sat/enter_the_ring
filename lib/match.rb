@@ -27,7 +27,13 @@ class Match
 	end
 
 	def encounter
-		any_fighters_want_to_punch? ? run_punch_encounter : run_fluff_encounter
+		if any_fighters_want_to_punch?
+			return run_punch_encounter
+		else
+			run_fluff_encounter
+		end
+
+		return []
 	end
 
 private
@@ -67,6 +73,8 @@ private
 	end
 
 	def run_punch_encounter
+		fighters_that_connected = []
+
 		punch_data.each do |data|
 			if data[:punch]
 				pressing_fighter = data[:fighter]
@@ -76,9 +84,13 @@ private
 
 				punch = pressing_fighter.punch_success?
 
+				fighters_that_connected << data[:fighter] if punch
+
 				postlude(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: punch)		
 			end
 		end
+
+		return fighters_that_connected
 	end
 
 	def pick_pressing_fighter

@@ -82,7 +82,7 @@ describe 'Match' do
 					expect(commentary).to receive(:prelude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
 					expect(commentary).to receive(:postlude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
 
-					match.encounter
+					expect(match.encounter).to eq([player])
 				end
 			end
 			context 'when player misses target' do
@@ -92,7 +92,7 @@ describe 'Match' do
 					expect(commentary).to receive(:prelude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
 					expect(commentary).to receive(:postlude).with(pressing_fighter: player, receiving_fighter: opponent, punch: false).once
 
-					match.encounter
+					expect(match.encounter).to eq([])
 				end
 			end
 		end
@@ -108,7 +108,7 @@ describe 'Match' do
 					expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 					expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 
-					match.encounter
+					expect(match.encounter).to eq([opponent])
 				end
 			end
 
@@ -119,7 +119,7 @@ describe 'Match' do
 					expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 					expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: false).once
 
-					match.encounter
+					expect(match.encounter).to eq([])
 				end
 			end
 		end
@@ -141,7 +141,7 @@ describe 'Match' do
 						expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 						expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: false).once
 
-						match.encounter
+						expect(match.encounter).to eq([player])
 					end
 				end
 
@@ -155,7 +155,7 @@ describe 'Match' do
 						expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 						expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 
-						match.encounter
+						expect(match.encounter).to eq([player, opponent])
 					end
 				end
 			end
@@ -173,7 +173,7 @@ describe 'Match' do
 						expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 						expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: false).once
 
-						match.encounter
+						expect(match.encounter).to eq([])
 					end
 				end
 
@@ -187,7 +187,7 @@ describe 'Match' do
 						expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 						expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 
-						match.encounter
+						expect(match.encounter).to eq([opponent])
 					end
 				end
 			end
@@ -203,7 +203,7 @@ describe 'Match' do
 				expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: false).once
 				expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: false).once
 
-				match.encounter 
+				expect(match.encounter).to eq([])
 			end
 		end
 	end
