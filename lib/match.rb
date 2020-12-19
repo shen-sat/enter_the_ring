@@ -1,11 +1,10 @@
 require_relative '../lib/shared_methods'
 
 class Match
-	attr_reader :commentary, :target, :moments, :punch_data, :ambient_action_score
+	attr_reader :commentary, :moments, :punch_data, :ambient_action_score
 
-	def initialize(commentary, target, player, opponent)
+	def initialize(commentary, player, opponent)
 		@commentary = commentary
-		@target = target
 		@moments = 10
 		@ambient_action_score = 4
 
@@ -120,17 +119,4 @@ end
 # 		end
 # 	end
 # end
-
-# class Target
-# 	def punch
-# 		puts 'x for punch, m for miss'
-# 		answer = gets.chomp
-# 		answer == 'x' ? true : false
-# 	end
-# end
-
-# commentary = Commentary.new
-# target = Target.new
-
-# Match.new(commentary,target,'Edgar','Mendes').run
 

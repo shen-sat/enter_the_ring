@@ -2,10 +2,9 @@ require_relative '../lib/match'
 
 describe 'Match' do
 	let(:commentary) { double() }
-	let(:target) { double() }
 	let(:player) { double('player') }
 	let(:opponent) { double('opponent') }
-	let(:match) { Match.new(commentary, target, player, opponent) }
+	let(:match) { Match.new(commentary, player, opponent) }
 
 	describe 'attributes' do
 		it 'has correct values' do
