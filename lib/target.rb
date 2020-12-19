@@ -11,20 +11,25 @@ class Target
 		@reader = TTY::Reader.new
 	end
 
-	def punch(match: false)
-		clear_screen
+	def train	
+		punch
 
+		result
+
+		show_options
+	end
+
+
+	def punch
+		clear_screen
+		
 		set_bullseye
 
 		intro_text
 
 		throw_fist
 
-		return hit? if match
-		
-		result
-
-		show_options
+		hit?
 	end
 
 private

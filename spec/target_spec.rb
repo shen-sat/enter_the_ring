@@ -15,7 +15,7 @@ describe 'Target' do
 		expect{ target.send(:intro_text) }.to output(expected_output).to_stdout
 	end
 	
-	it 'picks target' do
+	it 'sets bullseye' do
 		srand 1
 
 		target.send(:set_bullseye)
@@ -26,7 +26,7 @@ describe 'Target' do
 	describe '#throw_fist' do
 		before { allow(target).to receive(:land_fist).and_return(40) }
 
-		it 'sets target' do
+		it 'sets score' do
 			target.send(:throw_fist)
 
 			expect(target.score).to eq(40)
@@ -92,46 +92,40 @@ describe 'Target' do
 
 	describe '#punch' do
 		let(:hit_outcome) { double(:hit_outcome) }
+
 		before do
 			allow(target).to receive(:clear_screen)
 			allow(target).to receive(:set_bullseye)
 			allow(target).to receive(:intro_text)
 			allow(target).to receive(:throw_fist)
-
 			allow(target).to receive(:hit?).and_return(hit_outcome)
 		end
 
-		context 'when match is true (ie we are in a fight)' do
-			let(:match) { true }
+		it 'executes the correct behaviour and returns the correct value' do
+			expect(target).to receive(:clear_screen)
+			expect(target).to receive(:set_bullseye)
+			expect(target).to receive(:intro_text)
+			expect(target).to receive(:throw_fist)
 
-			before { allow(target).to receive(:show_options) }
+			outcome = target.punch
 
-			it 'executes the correct behaviour and returns the correct value' do
-				expect(target).to receive(:clear_screen)
-				expect(target).to receive(:set_bullseye)
-				expect(target).to receive(:throw_fist)
-				expect(target).not_to receive(:result)
-				expect(target).not_to receive(:show_options)
+			expect(outcome).to eq(hit_outcome)
+		end	
+	end
 
-				outcome = target.punch(match: match)
-				expect(outcome).to eq(hit_outcome)
-			end	
+	describe '#train' do
+		before do
+			allow(target).to receive(:punch)
+			allow(target).to receive(:result)
+			allow(target).to receive(:show_options)
 		end
 
-		context 'when match is false (ie we are in the gym)' do
-			let(:match) { false }
-			before { allow(target).to receive(:score).and_return(60) }
+		it 'executes the correct behaviour' do
+			expect(target).to receive(:punch)
+			expect(target).to receive(:result)
+			expect(target).to receive(:show_options)
 
-			it 'executes the correct behaviour and returns the correct value' do
-				expect(target).to receive(:clear_screen)
-				expect(target).to receive(:set_bullseye)
-				expect(target).to receive(:throw_fist)
-				expect(target).to receive(:result)
-				expect(target).to receive(:show_options)
-
-				outcome = target.punch(match: match)
-				expect(outcome).to eq(nil)
-			end	
+			target.train
 		end
 	end
 end
