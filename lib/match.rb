@@ -75,8 +75,7 @@ private
 
 				prelude(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: true)
 
-				#if player, then run target.punch to determine if postlude is punch or failed punch, else it is punch true for opponent
-				punch = (data == punch_data.first ? target.punch : true)
+				punch = pressing_fighter.punch_success?
 
 				postlude(pressing_fighter: pressing_fighter, receiving_fighter: receiving_fighter, punch: punch)		
 			end

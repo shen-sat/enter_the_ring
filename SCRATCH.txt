@@ -9,7 +9,7 @@ NEXT:
 	- inherit from Fighter class -- DONE
 	- override punch method -- DONE
 		- do target stuff and return true/false -- DONE
-- rewrite run_punch_encounter
+- rewrite run_punch_encounter -- DONE
 	- remove target from match
 	- run fighter.punch instead of target.punch
 	- return fighter if fighter.punch is true other return nothing
