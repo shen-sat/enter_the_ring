@@ -11,7 +11,7 @@ describe 'Fighter' do
 			before { allow(fighter).to receive(:rank).and_return(4) }
 
 			it 'returns true' do
-				expect(fighter.punch?).to eq(true)
+				expect(fighter.punch_success?).to eq(true)
 			end
 		end
 
@@ -19,7 +19,7 @@ describe 'Fighter' do
 			before { allow(fighter).to receive(:rank).and_return(5) }
 
 			it 'returns true' do
-				expect(fighter.punch?).to eq(true)
+				expect(fighter.punch_success?).to eq(true)
 			end
 		end
 
@@ -27,7 +27,7 @@ describe 'Fighter' do
 			before { allow(fighter).to receive(:rank).and_return(6) }
 
 			it 'returns false' do
-				expect(fighter.punch?).to eq(false)
+				expect(fighter.punch_success?).to eq(false)
 			end
 		end
 	end
