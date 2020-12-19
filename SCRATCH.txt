@@ -1,9 +1,9 @@
 NEXT:
 - a constant roll_die with a default 6 value -- DONE
 	- replace existing roll_die in Match -- DONE
-- create method punch in Fighter class
-	- uses roll_die const, using total rank (eg 10) and if >= self rank
-	- returns true or false
+- create method punch in Fighter class -- DONE
+	- uses roll_die const, using total rank (eg 10) and if >= self rank -- DONE
+	- returns true or false -- DONE
 - create player class
 	- initialize with target
 	- inherit from Fighter class
@@ -17,7 +17,8 @@ NEXT:
 - create a Match class that initialses with Round
 	-	Match calls round.something_happens?
 	- Match calls round.encounter
-	- if round.encounter returns a fighter, add fighter to Match score 
+	- if round.encounter returns a fighter, add fighter to Match score
+- test at the end
 
 
 TODO:
