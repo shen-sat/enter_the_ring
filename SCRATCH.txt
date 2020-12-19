@@ -4,11 +4,11 @@ NEXT:
 - create method punch in Fighter class -- DONE
 	- uses roll_die const, using total rank (eg 10) and if >= self rank -- DONE
 	- returns true or false -- DONE
-- create player class
-	- initialize with target
-	- inherit from Fighter class
-	- override punch method
-		- do target stuff and return true/false
+- create player class -- DONE
+	- initialize with target -- DONE
+	- inherit from Fighter class -- DONE
+	- override punch method -- DONE
+		- do target stuff and return true/false -- DONE
 - rewrite run_punch_encounter
 	- remove target from match
 	- run fighter.punch instead of target.punch

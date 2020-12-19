@@ -7,7 +7,7 @@ class Player < Fighter
 		@target = target
 	end
 
-	def punch?
-		target.punch
+	def punch?(match = false)
+		target.punch(match)
 	end
 end
