@@ -1,6 +1,6 @@
 require_relative '../lib/shared_methods'
 
-class Match
+class Round
 	attr_reader :commentary, :moments, :punch_data, :ambient_action_score
 
 	def initialize(commentary, player, opponent)

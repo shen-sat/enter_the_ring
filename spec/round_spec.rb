@@ -1,19 +1,19 @@
-require_relative '../lib/match'
+require_relative '../lib/round'
 
-describe 'Match' do
+describe 'Round' do
 	let(:commentary) { double() }
 	let(:player) { double('player') }
 	let(:opponent) { double('opponent') }
-	let(:match) { Match.new(commentary, player, opponent) }
+	let(:round) { Round.new(commentary, player, opponent) }
 
 	describe 'attributes' do
 		it 'has correct values' do
-			expect(match.moments).to eq(10)
-			expect(match.ambient_action_score).to eq(4)
+			expect(round.moments).to eq(10)
+			expect(round.ambient_action_score).to eq(4)
 
 			punch_data = { punch: false, block_punch: false, counter: 1 }
-			expect(match.punch_data.first).to eq(punch_data.merge(fighter: player))
-			expect(match.punch_data.last).to eq(punch_data.merge(fighter: opponent))
+			expect(round.punch_data.first).to eq(punch_data.merge(fighter: player))
+			expect(round.punch_data.last).to eq(punch_data.merge(fighter: opponent))
 		end
 	end
 
@@ -22,40 +22,40 @@ describe 'Match' do
 		let(:punch_set_to_false) { { punch: false, block_punch: false, counter: 1 } }
 
 		before do 
-			allow(match).to receive(:sleep)
-			allow(match).to receive(:decide_punches)
+			allow(round).to receive(:sleep)
+			allow(round).to receive(:decide_punches)
 		end
 
 		context 'when player punch is true' do
-			before { match.instance_variable_set(:@punch_data, [punch_set_to_true, punch_set_to_false] ) }
+			before { round.instance_variable_set(:@punch_data, [punch_set_to_true, punch_set_to_false] ) }
 
 			it 'returns true' do
-				expect(match.something_happens?).to eq(true)
+				expect(round.something_happens?).to eq(true)
 			end
 		end
 
 		context 'when opponent punch is true' do
-			before { match.instance_variable_set(:@punch_data, [punch_set_to_false, punch_set_to_true] ) }
+			before { round.instance_variable_set(:@punch_data, [punch_set_to_false, punch_set_to_true] ) }
 
 			it 'returns true' do
-				expect(match.something_happens?).to eq(true)
+				expect(round.something_happens?).to eq(true)
 			end
 		end
 
 		context 'when player and opponent punch are false' do
 			context 'when die roll is >= ambient_action_score' do
-				before { allow(SharedMethods).to receive(:roll_die).and_return(match.ambient_action_score) }
+				before { allow(SharedMethods).to receive(:roll_die).and_return(round.ambient_action_score) }
 				
 				it 'returns true' do
-					expect(match.something_happens?).to eq(true)
+					expect(round.something_happens?).to eq(true)
 				end
 			end
 
 			context 'when die roll is <= 4' do
-				before { allow(SharedMethods).to receive(:roll_die).and_return(match.ambient_action_score - 1) }
+				before { allow(SharedMethods).to receive(:roll_die).and_return(round.ambient_action_score - 1) }
 				
 				it 'returns false' do
-					expect(match.something_happens?).to eq(false)
+					expect(round.something_happens?).to eq(false)
 				end
 			end
 		end
@@ -66,9 +66,9 @@ describe 'Match' do
 		let(:opponent_punch_data) { { fighter: opponent, punch: opponent_punch, block_punch: false, counter: 1 } }
 
 		before do
-			allow(match).to receive(:sleep)
+			allow(round).to receive(:sleep)
 
-			match.instance_variable_set(:@punch_data, [player_punch_data, opponent_punch_data])
+			round.instance_variable_set(:@punch_data, [player_punch_data, opponent_punch_data])
 		end
 
 		context 'when player has punch true' do
@@ -82,7 +82,7 @@ describe 'Match' do
 					expect(commentary).to receive(:prelude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
 					expect(commentary).to receive(:postlude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
 
-					expect(match.encounter).to eq([player])
+					expect(round.encounter).to eq([player])
 				end
 			end
 			context 'when player misses target' do
@@ -92,7 +92,7 @@ describe 'Match' do
 					expect(commentary).to receive(:prelude).with(pressing_fighter: player, receiving_fighter: opponent, punch: true).once
 					expect(commentary).to receive(:postlude).with(pressing_fighter: player, receiving_fighter: opponent, punch: false).once
 
-					expect(match.encounter).to eq([])
+					expect(round.encounter).to eq([])
 				end
 			end
 		end
@@ -108,7 +108,7 @@ describe 'Match' do
 					expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 					expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 
-					expect(match.encounter).to eq([opponent])
+					expect(round.encounter).to eq([opponent])
 				end
 			end
 
@@ -119,7 +119,7 @@ describe 'Match' do
 					expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 					expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: false).once
 
-					expect(match.encounter).to eq([])
+					expect(round.encounter).to eq([])
 				end
 			end
 		end
@@ -141,7 +141,7 @@ describe 'Match' do
 						expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 						expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: false).once
 
-						expect(match.encounter).to eq([player])
+						expect(round.encounter).to eq([player])
 					end
 				end
 
@@ -155,7 +155,7 @@ describe 'Match' do
 						expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 						expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 
-						expect(match.encounter).to eq([player, opponent])
+						expect(round.encounter).to eq([player, opponent])
 					end
 				end
 			end
@@ -173,7 +173,7 @@ describe 'Match' do
 						expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 						expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: false).once
 
-						expect(match.encounter).to eq([])
+						expect(round.encounter).to eq([])
 					end
 				end
 
@@ -187,7 +187,7 @@ describe 'Match' do
 						expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 						expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: true).once
 
-						expect(match.encounter).to eq([opponent])
+						expect(round.encounter).to eq([opponent])
 					end
 				end
 			end
@@ -197,65 +197,65 @@ describe 'Match' do
 			let(:player_punch) { false }
 			let(:opponent_punch) { false }
 
-			before { allow(match).to receive(:pick_pressing_fighter).and_return(opponent) }
+			before { allow(round).to receive(:pick_pressing_fighter).and_return(opponent) }
 
 			it 'calls commentary with correct params once for prelude and once for postlude' do
 				expect(commentary).to receive(:prelude).with(pressing_fighter: opponent, receiving_fighter: player, punch: false).once
 				expect(commentary).to receive(:postlude).with(pressing_fighter: opponent, receiving_fighter: player, punch: false).once
 
-				expect(match.encounter).to eq([])
+				expect(round.encounter).to eq([])
 			end
 		end
 	end
 
 	describe '#decide_punches during a game loop' do
-		let(:player_punch_data) { match.punch_data.first }
+		let(:player_punch_data) { round.punch_data.first }
 
 		it 'when roll_die equals moments it goes through game loop' do
-			roll_die_result = match.moments
+			roll_die_result = round.moments
 			allow(SharedMethods).to receive(:roll_die).and_return(roll_die_result)
 
 			(roll_die_result - 1).times do
 				counter = player_punch_data[:counter]
 
-				match.send(:decide_punches)
+				round.send(:decide_punches)
 
 				expect(player_punch_data[:punch]).to eq(false)
 				expect(player_punch_data[:block_punch]).to eq(false)
 				expect(player_punch_data[:counter]).to eq(counter + 1)
 			end
 
-			match.send(:decide_punches)
+			round.send(:decide_punches)
 			expect(player_punch_data[:punch]).to eq(true)
 			expect(player_punch_data[:block_punch]).to eq(false)
 			expect(player_punch_data[:counter]).to eq(1)
 
-			match.send(:decide_punches)
+			round.send(:decide_punches)
 			expect(player_punch_data[:punch]).to eq(false)
 			expect(player_punch_data[:block_punch]).to eq(false)
 			expect(player_punch_data[:counter]).to eq(2)
 		end
 
 		it 'when roll_die is one less than moments it goes through game loop' do
-			roll_die_result = match.moments - 1
+			roll_die_result = round.moments - 1
 			allow(SharedMethods).to receive(:roll_die).and_return(roll_die_result)
 
 			(roll_die_result - 1).times do
 				counter = player_punch_data[:counter]
 
-				match.send(:decide_punches)
+				round.send(:decide_punches)
 
 				expect(player_punch_data[:punch]).to eq(false)
 				expect(player_punch_data[:block_punch]).to eq(false)
 				expect(player_punch_data[:counter]).to eq(counter + 1)
 			end
 
-			match.send(:decide_punches)
+			round.send(:decide_punches)
 			expect(player_punch_data[:punch]).to eq(true)
 			expect(player_punch_data[:block_punch]).to eq(true)
-			expect(player_punch_data[:counter]).to eq(match.moments)
+			expect(player_punch_data[:counter]).to eq(round.moments)
 
-			match.send(:decide_punches)
+			round.send(:decide_punches)
 			expect(player_punch_data[:punch]).to eq(false)
 			expect(player_punch_data[:block_punch]).to eq(false)
 			expect(player_punch_data[:counter]).to eq(1)

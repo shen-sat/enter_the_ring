@@ -51,13 +51,11 @@ private
 		end
 	end
 
-	#This will change depending on if we are in gym or in match
 	def result
 		output = "You got #{score} - "
 		output + (hit? ? 'good punch!' : 'you missed the bag!')
 	end
 
-	#This will not exist in match
 	def show_options
 		choices = { retry: :retry }
 		
