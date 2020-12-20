@@ -36,3 +36,25 @@ TODO:
 
 	DONT WORRY:
 	- about converting a csv for ruby game - just feed game ahash with limited lines. Save working out converting csv for Lua!
+
+	Overall goal:
+	- Meet the most devious...your roster
+
+	GOAL MARK I:
+	- Basic title sceen
+	- Intro to game with Gregg
+		- Become champ
+		- 3 losses and you are out
+	- Gym screen
+		- Train
+		- Check newspaper
+			- Check rankings
+			- Check next fight stats
+			- Special "Breaks into the top 3!"
+		- Fight
+	- Pre-fight presser - "Imma smash 'im"
+	- Fight
+	 - player hits >= fighter hits, then player wins
+	 - player loses, then get 1 loss and rematch *chance for trash talk!
+	 - player gets three losses, then game over 
+	- Gym screen
