@@ -1,24 +1,14 @@
 NEXT:
-- a constant roll_die with a default 6 value -- DONE
-	- replace existing roll_die in Match -- DONE
-- create method punch in Fighter class -- DONE
-	- uses roll_die const, using total rank (eg 10) and if >= self rank -- DONE
-	- returns true or false -- DONE
-- create player class -- DONE
-	- initialize with target -- DONE
-	- inherit from Fighter class -- DONE
-	- override punch method -- DONE
-		- do target stuff and return true/false -- DONE
-- rewrite run_punch_encounter -- DONE
-	- remove target from match -- DONE
-	- run fighter.punch instead of target.punch -- DONE
-	- return fighter if fighter.punch is true other return nothing -- DONE
-- rename Match to Round
-- create a Match class that initialses with Round
-	-	Match calls round.something_happens?
-	- Match calls round.encounter
-	- if round.encounter returns a fighter, add fighter to Match score
-- test at the end
+- archive current Round (and spec)
+- Create a new class Schedule
+	- initialises with settings values:
+		- number of phases
+		- number of blank_slots
+		- raise an exception if phases/slots != a whole number
+		- the blank_schedule (which will be a 2d array of :blank_slot(s), slots divided into the number of phases)
+	- set hit_slot
+		- roll a die with steps divided by phases for each phase and insert a hit slot at the rolled value
+	- make returns the schedule
 
 
 TODO:
@@ -58,3 +48,19 @@ TODO:
 	 - player loses, then get 1 loss and rematch *chance for trash talk!
 	 - player gets three losses, then game over 
 	- Gym screen
+
+	DONE:
+	- a constant roll_die with a default 6 value -- DONE
+		- replace existing roll_die in Match -- DONE
+	- create method punch in Fighter class -- DONE
+		- uses roll_die const, using total rank (eg 10) and if >= self rank -- DONE
+		- returns true or false -- DONE
+	- create player class -- DONE
+		- initialize with target -- DONE
+		- inherit from Fighter class -- DONE
+		- override punch method -- DONE
+			- do target stuff and return true/false -- DONE
+	- rewrite run_punch_encounter -- DONE
+		- remove target from match -- DONE
+		- run fighter.punch instead of target.punch -- DONE
+		- return fighter if fighter.punch is true other return nothing -- DONE
