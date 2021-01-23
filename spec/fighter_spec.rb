@@ -5,7 +5,7 @@ describe 'Fighter' do
 	subject(:fighter) { Fighter.new }
 
 	describe '#punch?' do
-		before { allow(fighter).to receive(:rand).and_return(5) }
+		before { allow(SharedMethods).to receive(:roll_die).and_return(5) }
 
 		context 'when fighter rank is lower than die roll' do
 			before { allow(fighter).to receive(:rank).and_return(4) }

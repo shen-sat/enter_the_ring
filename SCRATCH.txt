@@ -1,17 +1,31 @@
 NEXT:
-- archive current Round (and spec)
-- Create a new class Schedule
-	- initialises with settings values:
-		- number of phases
-		- number of blank_slots
-		- raise an exception if phases/slots != a whole number
-		- the blank_schedule (which will be a 2d array of :blank_slot(s), slots divided into the number of phases)
-	- set hit_slot
-		- roll a die with steps divided by phases for each phase and insert a hit slot at the rolled value
-	- make returns the schedule
+- archive current Round (and spec) -- DONE
+- Rewrite Commentary to Commentator
+	- initialises with lines
+	- delete existing methods
+	- method: commentate - takes in:
+		- fighter_a, fighter_b, punch: true - fighter_a swings for punch!
+		- fighter_a, fighter_b, punch: false - fighter_a presses
+- in Fighter create methods for roll for activity and roll for punch - put in constants for now (1/3 and 1/3)
+- in Player, override both to return constants for now (2/3 and 2/3)
+- Create new class Round
+	- initialises with number_of_slots, 30 (comes from a constant)
+	- initialises with Commentator
+	- initialises with Player
+	- initialises with Opponent
+	- method: roll_for_activity (delegate?) - takes in okayer and opp - either returns a fighter or nothing
+	- method: roll_for_punch (delegate) - takes in a fighter - either returns true of false
+	- method: commentate (delegate to commentator) - takes in both fighters
+	- flow is:
+		- pressor = round.pressor
+		- if pressor
+			- commentator.press_line(pressor)
+			- 
+			- commentator.activity
 
 
 TODO:
+- Fighter should implement fight_health (that for now will be a constant, 3)
 - in a match, when punch is true for opponent, they always hit:
 	- maybe they should only be successful a set number of times, depending on rank (KISS)
 - grudge: another attribute that randomlt develops after a fight. The next trash talk will take this attribute into account
