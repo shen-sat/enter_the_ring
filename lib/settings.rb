@@ -1,4 +1,6 @@
 class Settings
 	ROSTER_SIZE = 10.freeze
 	SLOTS = 30.freeze
+	FIGHTER_PUNCH_CHANCE_THRESHOLD = 4.freeze
+	FIGHTER_ACTIVITY_CHANCE_THRESHOLD = 2.freeze
 end

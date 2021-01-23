@@ -5,11 +5,17 @@ class Commentary
 		@lines = lines
 	end
 
-	def prelude(pressing_fighter:, receiving_fighter:, punch:)
-		punch ? lines[:prelude][:punch].sample : lines[:prelude][:fluff].sample 
+	def build_up(pressing_fighter, receiving_fighter, special: false)
+		special ? lines[:build_up][:special].sample : lines[:build_up][:normal].sample
 	end
 
-	def postlude(pressing_fighter:, receiving_fighter:, punch:)
-		punch ? lines[:postlude][:punch].sample : lines[:postlude][:fluff].sample
+	def outcome(pressing_fighter, receiving_fighter, hit: nil)
+		if hit.nil?
+			lines[:outcome][:normal].sample
+		elsif hit
+			lines[:outcome][:hit].sample
+		else
+			lines[:outcome][:miss].sample
+		end
 	end
 end
