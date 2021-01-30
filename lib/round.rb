@@ -1,7 +1,7 @@
 require_relative '../lib/settings'
 
 class Round
-	attr_reader :fighter_a, :fighter_b
+	attr_reader :fighter_a, :fighter_b, :commentary
 
 	def initialize(fighter_a, fighter_b, commentary)
 		@fighter_a = fighter_a
@@ -9,6 +9,30 @@ class Round
 		@commentary = commentary
 		@no_of_slots = Settings::SLOTS
 	end
+
+	def run
+		pressor = check_for_pressor
+
+		if pressor
+			receiver = get_receiver(pressor)
+
+			commentary.build_up(pressor, receiver, special: false)
+
+			if pressor.cock_the_hammer?
+				commentary.build_up(pressor, receiver, special: true)
+
+				if pressor.punch
+					commentary.outcome(pressor, receiver, hit: true)
+				else
+					commentary.outcome(pressor, receiver, hit: false)
+				end
+			else
+				commentary.outcome(pressor, receiver, hit: nil)
+			end
+		end
+	end
+
+	private
 
 	def check_for_pressor
 		fighter_a_presses = fighter_a.press?
@@ -25,7 +49,7 @@ class Round
 		end
 	end
 
-	def fighter_cocks_hammer?(fighter)
-		fighter.cock_the_hammer?
+	def get_receiver(opponent)
+		([fighter_a, fighter_b] - [opponent]).first
 	end
 end

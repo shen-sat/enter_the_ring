@@ -7,12 +7,15 @@ NEXT:
 	- flow is:
 		- pressor = round.check_for_pressor #both fighters roll, whoever rolls highest and above threshold
 		- if pressor
+			- commentator.build_up(special: false)
 			- if round.check_for_intention_to_punch
 				- commentator.build_up(special: true)
-				- wait one sec
 				- if fighter.punch
+					- commnetator.outcome(hit:true)
+				- else
+					- commnetator.outcome(hit:false)
 			- else
-				- commentator.build
+				- commentator.outcome(hit: nil)
 
 
 TODO:
