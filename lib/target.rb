@@ -11,15 +11,6 @@ class Target
 		@reader = TTY::Reader.new
 	end
 
-	def train	
-		punch
-
-		result
-
-		show_options
-	end
-
-
 	def punch
 		clear_screen
 		
@@ -49,19 +40,6 @@ private
 			
 			break if answer == 'x'
 		end
-	end
-
-	def result
-		output = "You got #{score} - "
-		output + (hit? ? 'good punch!' : 'you missed the bag!')
-	end
-
-	def show_options
-		choices = { retry: :retry }
-		
-		answer = prompt.select('What would you like to do?', choices)
-
-		punch if answer == :retry
 	end
 
 	#This can be removed in game code (and just use land_fist), for now it makes testing easier 
