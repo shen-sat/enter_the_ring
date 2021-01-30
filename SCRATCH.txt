@@ -1,6 +1,4 @@
 NEXT:
-- Amend Fighter
-	- rename punch_successful? to punch
 - Create new class Round
 	- initialises with number_of_slots, 30 (comes from a constant)
 	- initialises with Player
@@ -98,3 +96,5 @@ TODO:
 	- Amend Player:
 		- initialize with Target
 		- Player.punch delegates to Target.punch
+	- Amend Fighter
+		- rename punch_successful? to punch

@@ -4,14 +4,14 @@ require_relative '../lib/shared_methods'
 describe 'Fighter' do
 	subject(:fighter) { Fighter.new }
 
-	describe '#punch_successful?' do
+	describe '#punch' do
 		before { allow(SharedMethods).to receive(:roll_die).and_return(5) }
 
 		context 'when fighter rank is lower than die roll' do
 			before { allow(fighter).to receive(:rank).and_return(4) }
 
 			it 'returns true' do
-				expect(fighter.punch_successful?).to eq(true)
+				expect(fighter.punch).to eq(true)
 			end
 		end
 
@@ -19,7 +19,7 @@ describe 'Fighter' do
 			before { allow(fighter).to receive(:rank).and_return(5) }
 
 			it 'returns true' do
-				expect(fighter.punch_successful?).to eq(true)
+				expect(fighter.punch).to eq(true)
 			end
 		end
 
@@ -27,7 +27,7 @@ describe 'Fighter' do
 			before { allow(fighter).to receive(:rank).and_return(6) }
 
 			it 'returns false' do
-				expect(fighter.punch_successful?).to eq(false)
+				expect(fighter.punch).to eq(false)
 			end
 		end
 	end
