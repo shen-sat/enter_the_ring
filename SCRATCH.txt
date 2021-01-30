@@ -1,21 +1,34 @@
 NEXT:
+- Amend Target
+	- remove train method (this can be in Gym class - it will check to see if punch was success or not and return a "hit" or "miss" message, plus options)
+- Amend Player:
+	- initialize with Target
+	- Player.punch delegates to Target.punch
+- Amend Fighter
+	- rename punch_successful? to punch
 - Create new class Round
 	- initialises with number_of_slots, 30 (comes from a constant)
-	- initialises with Commentator
 	- initialises with Player
 	- initialises with Opponent
+	- initialises with Commentator
 	- method: roll_for_activity (delegate?) - takes in okayer and opp - either returns a fighter or nothing
 	- method: roll_for_punch (delegate) - takes in a fighter - either returns true of false
 	- method: commentate (delegate to commentator) - takes in both fighters
 	- flow is:
-		- pressor = round.pressor
+		- pressor = round.check_for_pressor #both fighters roll, whoever rolls highest and above threshold
 		- if pressor
-			- commentator.press_line(pressor)
-			- 
-			- commentator.activity
+			- if round.check_for_intention_to_punch
+				- commentator.build_up(special: true)
+				- wait one sec
+				- if fighter.punch
+			- else
+				- commentator.build
 
 
 TODO:
+- Gym class 
+	- where player can train (it will make player.punch and return hit, miss and options message)
+	- where player can read paper
 - Fighter should implement fight_health (that for now will be a constant, 3)
 - in a match, when punch is true for opponent, they always hit:
 	- maybe they should only be successful a set number of times, depending on rank (KISS)
