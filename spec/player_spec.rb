@@ -4,12 +4,12 @@ describe 'Player' do
 	let(:target) { double() }
 	let(:player) { Player.new(target) }
 
-	describe '#punch_success?' do
+	describe '#punch' do
 		context 'when Target is hit' do
 			before { allow(target).to receive(:punch).and_return(true) }
 
 			it 'returns true' do
-				expect(player.punch_success?).to eq(true)
+				expect(player.punch).to eq(true)
 			end
 		end
 
@@ -17,7 +17,7 @@ describe 'Player' do
 			before { allow(target).to receive(:punch).and_return(false) }
 
 			it 'returns false' do
-				expect(player.punch_success?).to eq(false)
+				expect(player.punch).to eq(false)
 			end
 		end
 	end

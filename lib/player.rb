@@ -7,7 +7,7 @@ class Player < Fighter
 		@target = target
 	end
 
-	def punch_success?
+	def punch
 		target.punch
 	end
 end
