@@ -49,4 +49,21 @@ describe 'Round' do
 			end
 		end
 	end
+
+	describe '#fighter_cocks_hammer?' do
+		context 'when fighter cocks hammer' do
+			before { allow(fighter_a).to receive(:cock_the_hammer?).and_return(true) }
+
+			it 'returns true' do
+				expect(round.fighter_cocks_hammer?(fighter_a)).to eq(true)
+			end
+		end
+		context 'when fighter does not cock hammer' do
+			before { allow(fighter_a).to receive(:cock_the_hammer?).and_return(false) }
+
+			it 'returns true' do
+				expect(round.fighter_cocks_hammer?(fighter_a)).to eq(false)
+			end
+		end	
+	end
 end

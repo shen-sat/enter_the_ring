@@ -24,4 +24,8 @@ class Round
 			nil
 		end
 	end
+
+	def fighter_cocks_hammer?(fighter)
+		fighter.cock_the_hammer?
+	end
 end

@@ -16,6 +16,7 @@ NEXT:
 
 
 TODO:
+- Personality of player (aggressive, passive etc). So that replies to intervies appear in correct way in paper
 - Gym class 
 	- where player can train (it will make player.punch and return hit, miss and options message)
 	- where player can read paper
