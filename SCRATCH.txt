@@ -4,9 +4,6 @@ NEXT:
 	- initialises with Player
 	- initialises with Opponent
 	- initialises with Commentator
-	- method: roll_for_activity (delegate?) - takes in okayer and opp - either returns a fighter or nothing
-	- method: roll_for_punch (delegate) - takes in a fighter - either returns true of false
-	- method: commentate (delegate to commentator) - takes in both fighters
 	- flow is:
 		- pressor = round.check_for_pressor #both fighters roll, whoever rolls highest and above threshold
 		- if pressor

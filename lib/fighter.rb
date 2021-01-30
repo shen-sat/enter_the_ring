@@ -7,11 +7,11 @@ class Fighter
 		SharedMethods.roll_die(Settings::ROSTER_SIZE) >= rank
 	end
 
-	def presses?
+	def press?
 		SharedMethods.roll_die <= Settings::FIGHTER_ACTIVITY_CHANCE_THRESHOLD
 	end
 
-	def cocks_the_hammer?
+	def cock_the_hammer?
 		SharedMethods.roll_die <= Settings::FIGHTER_PUNCH_CHANCE_THRESHOLD
 	end
 end
