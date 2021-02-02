@@ -1,21 +1,10 @@
 NEXT:
-- Create new class Round
-	- initialises with number_of_slots, 30 (comes from a constant)
-	- initialises with Player
-	- initialises with Opponent
-	- initialises with Commentator
-	- flow is:
-		- pressor = round.check_for_pressor #both fighters roll, whoever rolls highest and above threshold
-		- if pressor
-			- commentator.build_up(special: false)
-			- if round.check_for_intention_to_punch
-				- commentator.build_up(special: true)
-				- if fighter.punch
-					- commnetator.outcome(hit:true)
-				- else
-					- commnetator.outcome(hit:false)
-			- else
-				- commentator.outcome(hit: nil)
+- Match
+	- initialises Round with attrs
+	- initialises with a score of 0 for each fighter
+	- plays a round 3 times
+		- after each round, takes round.scores and adds to each fighter
+		- after last round returns the {winner:, loser:} 
 
 
 TODO:
@@ -99,3 +88,20 @@ TODO:
 		- Player.punch delegates to Target.punch
 	- Amend Fighter
 		- rename punch_successful? to punch
+	- Create new class Round
+		- initialises with number_of_slots, 30 (comes from a constant)
+		- initialises with Player
+		- initialises with Opponent
+		- initialises with Commentator
+		- flow is:
+			- pressor = round.check_for_pressor #both fighters roll, whoever rolls highest and above threshold
+			- if pressor
+				- commentator.build_up(special: false)
+				- if round.check_for_intention_to_punch
+					- commentator.build_up(special: true)
+					- if fighter.punch
+						- commnetator.outcome(hit:true)
+					- else
+						- commnetator.outcome(hit:false)
+				- else
+					- commentator.outcome(hit: nil)

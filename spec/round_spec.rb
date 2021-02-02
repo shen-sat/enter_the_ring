@@ -49,12 +49,14 @@ describe 'Round' do
 				context 'when pressor connects' do
 					before { allow(fighter_b).to receive(:punch).and_return(true) }
 
-					it 'commentates appropriately' do
+					it 'commentates appropriately and adds to score' do
 						expect(commentary).to receive(:build_up).with(fighter_b, fighter_a, special: false)
 						expect(commentary).to receive(:build_up).with(fighter_b, fighter_a, special: true)
 						expect(commentary).to receive(:outcome).with(fighter_b, fighter_a, hit: true)
 
 						round.run
+
+						expect(round.scores).to eq( { fighter_b => 1} )
 					end
 				end
 			end

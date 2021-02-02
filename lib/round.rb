@@ -1,13 +1,14 @@
 require_relative '../lib/settings'
 
 class Round
-	attr_reader :fighter_a, :fighter_b, :commentary
+	attr_reader :fighter_a, :fighter_b, :commentary, :scores
 
 	def initialize(fighter_a, fighter_b, commentary)
 		@fighter_a = fighter_a
 		@fighter_b = fighter_b
 		@commentary = commentary
 		@no_of_slots = Settings::SLOTS
+		@scores = Hash.new(0)
 	end
 
 	def run
@@ -23,6 +24,7 @@ class Round
 
 				if pressor.punch
 					commentary.outcome(pressor, receiver, hit: true)
+					scores[pressor] += 1
 				else
 					commentary.outcome(pressor, receiver, hit: false)
 				end
